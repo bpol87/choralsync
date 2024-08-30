@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 function RegisterForm() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const errors = useSelector((store) => store.errors);
   const dispatch = useDispatch();
 
@@ -11,7 +11,7 @@ function RegisterForm() {
     event.preventDefault();
 
     dispatch({
-      type: 'REGISTER',
+      type: "REGISTER",
       payload: {
         username: username,
         password: password,
@@ -20,39 +20,46 @@ function RegisterForm() {
   }; // end registerUser
 
   return (
-    <form className="formPanel" onSubmit={registerUser}>
+    <form
+      className="flex flex-col border border-slate-900 bg-white w-96 items-center rounded-lg shadow-lg p-4 mb-4 "
+      onSubmit={registerUser}
+    >
       <h2>Register User</h2>
       {errors.registrationMessage && (
         <h3 className="alert" role="alert">
           {errors.registrationMessage}
         </h3>
       )}
-      <div>
-        <label htmlFor="username">
-          Username:
-          <input
-            type="text"
-            name="username"
-            value={username}
-            required
-            onChange={(event) => setUsername(event.target.value)}
-          />
-        </label>
+      <div className="flex flex-col items-center m-4">
+        <label htmlFor="username">Email Address:</label>
+        <input
+          className="border border-slate-700 rounded-md shadow-md ml-2"
+          type="text"
+          name="username"
+          value={username}
+          required
+          onChange={(event) => setUsername(event.target.value)}
+        />
+      </div>
+      <div className="flex flex-col items-center m-4">
+        <label htmlFor="password">Password:</label>
+        <input
+          className="border border-slate-700 rounded-md shadow-md ml-2"
+          type="password"
+          name="password"
+          value={password}
+          required
+          onChange={(event) => setPassword(event.target.value)}
+        />
       </div>
       <div>
-        <label htmlFor="password">
-          Password:
-          <input
-            type="password"
-            name="password"
-            value={password}
-            required
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </label>
-      </div>
-      <div>
-        <input className="btn" type="submit" name="submit" value="Register" />
+        <button
+          className="border border-slate-600 rounded-full px-6 m-4"
+          type="submit"
+          name="submit"
+        >
+          Register
+        </button>
       </div>
     </form>
   );

@@ -1,22 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import LogOutButton from '../LogOutButton/LogOutButton';
-import './Nav.css';
 import { useSelector } from 'react-redux';
 
 function Nav() {
   const user = useSelector((store) => store.user);
 
   return (
-    <div className="nav">
+    <div className="flex flex-row p-4 bg-gray-300 text-teal-950 shadow-black shadow-sm">
       <Link to="/home">
-        <h2 className="nav-title">Prime Solo Project</h2>
+        <h2 className="nav-title mr-8">ChoralSync</h2>
       </Link>
       <div>
         {/* If no user is logged in, show these links */}
         {!user.id && (
           // If there's no user, show login/registration links
-          <Link className="navLink" to="/login">
+          <Link className="hover:bg-teal-800 hover:text-white" to="/login">
             Login / Register
           </Link>
         )}
@@ -24,19 +23,19 @@ function Nav() {
         {/* If a user is logged in, show these links */}
         {user.id && (
           <>
-            <Link className="navLink" to="/user">
+            <Link className="hover:bg-teal-800 hover:text-white" to="/user">
               Home
             </Link>
 
-            <Link className="navLink" to="/info">
+            <Link className="hover:bg-teal-800 hover:text-white" to="/info">
               Info Page
             </Link>
 
-            <LogOutButton className="navLink" />
+            <LogOutButton className="hover:bg-teal-800 hover:text-white" />
           </>
         )}
 
-        <Link className="navLink" to="/about">
+        <Link className="hover:bg-teal-800 hover:text-white" to="/about">
           About
         </Link>
       </div>
