@@ -19,6 +19,8 @@ import InfoPage from '../InfoPage/InfoPage';
 import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
+import Checklist from '../Checklist/Checklist';
+import ProfileInfo from '../Checklist/ProfileInfo';
 
 import './App.css';
 
@@ -57,7 +59,10 @@ function App() {
             exact
             path="/user"
           >
-            <UserPage />
+            {!user.isChecklistComplete ?
+              <Checklist />
+            :
+            <UserPage />}
           </ProtectedRoute>
 
           <ProtectedRoute
@@ -66,6 +71,14 @@ function App() {
             path="/info"
           >
             <InfoPage />
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            // logged in shows InfoPage else shows LoginPage
+            exact
+            path="/profile-info"
+          >
+            <ProfileInfo />
           </ProtectedRoute>
 
           <Route
