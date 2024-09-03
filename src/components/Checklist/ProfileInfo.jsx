@@ -49,7 +49,7 @@ function ProfileInfo() {
     };
 
     dispatch({ type: "SUBMIT_PROFILE", payload: profileToAdd });
-    history.push('/checklist')
+    // history.push('/checklist')
   };
 
   const submitInfoNS = (event) => {
@@ -71,7 +71,7 @@ function ProfileInfo() {
     };
 
     dispatch({ type: "SUBMIT_PROFILE", payload: profileToAdd });
-    history.push('/contact-info')
+    // history.push('/contact-info')
   };
 
   return (
