@@ -25,12 +25,8 @@ function SocialInfo() {
     };
 
     dispatch({ type: "SUBMIT_SOCIAL", payload: socialToAdd });
-
-    if (button === "backToChecklist") {
-      history.push("/");
-    } else if (button === "nextSection") {
-      history.push("/social-info");
-    }
+    
+      history.push("/checklist");
   };
 
   return (

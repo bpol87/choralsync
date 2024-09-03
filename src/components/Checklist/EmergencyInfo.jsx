@@ -20,11 +20,7 @@ function EmergencyInfo() {
 
     dispatch({ type: "SUBMIT_EMERGENCY", payload: contactToAdd });
 
-    if (button === "backToChecklist") {
       history.push("/checklist");
-    } else if (button === "nextSection") {
-      history.push("/about-info");
-    }
   };
 
   return (

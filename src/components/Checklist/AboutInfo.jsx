@@ -22,11 +22,8 @@ function AboutInfo() {
 
     dispatch({ type: "SUBMIT_ABOUT", payload: aboutToAdd });
 
-    if (button === "backToChecklist") {
-      history.push("/");
-    } else if (button === "nextSection") {
-      history.push("/social-info");
-    }
+      history.push("/checklist");
+   
   };
 
   return (

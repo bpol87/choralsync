@@ -46,11 +46,8 @@ function ContactInfo() {
 
     dispatch({ type: "SUBMIT_CONTACT", payload: contactToAdd });
 
-    if (button === "backToChecklist") {
       history.push('/checklist')
-    } else if (button === "nextSection") {
-      history.push('/emergency-info')
-    }
+    
   };
 
   return (
