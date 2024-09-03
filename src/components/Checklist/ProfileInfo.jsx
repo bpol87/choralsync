@@ -25,12 +25,12 @@ function ProfileInfo() {
   const handlePronounChange = (e) => {
     setHidePronouns(e.target.checked);
   };
-  
+
   const handleMiddleChange = (e) => {
     setHideMiddle(e.target.checked);
   };
 
-  const submitInfoBTC = (event) => {
+  const submitInfo = (button) => {
     let profileToAdd = {
       first_name: firstName,
       last_name: lastName,
@@ -45,38 +45,16 @@ function ProfileInfo() {
       height_ft: heightFt,
       height_in: heightIn,
       sheet_music: sheetMusic,
-      accessibility: accessibility
+      accessibility: accessibility,
     };
 
     dispatch({ type: "SUBMIT_PROFILE", payload: profileToAdd });
-    // history.push('/checklist')
-  };
-
-  const submitInfoNS = (event) => {
-    let profileToAdd = {
-      first_name: firstName,
-      last_name: lastName,
-      middle_initial: middleInitial,
-      hide_middle_initial: hideMiddle,
-      pronouns: pronouns,
-      hide_pronouns: hidePronouns,
-      nickname: nickname,
-      birthday: birthday,
-      formal_name: formalName,
-      shirt_size_id: shirtSize,
-      height_ft: heightFt,
-      height_in: heightIn,
-      sheet_music: sheetMusic,
-      accessibility: accessibility
-    };
-
-    dispatch({ type: "SUBMIT_PROFILE", payload: profileToAdd });
-    // history.push('/contact-info')
+    history.push('/checklist')
   };
 
   return (
     <div className="flex flex-col items-center px-4 py-2 text-sm">
-      <div className="w-80 flex flex-col items-center border-1 border-slate-600 rounded-lg shadow-md bg-white">
+      <div className=" flex flex-col items-center border-1 border-slate-600 rounded-lg shadow-md bg-white">
         <h2 className="text-lg font-bold">Profile Information</h2>
         <form>
           <div className="flex flex-col px-4 py-2">
@@ -103,7 +81,6 @@ function ProfileInfo() {
               className="mr-2"
               type="checkbox"
               onChange={handleMiddleChange}
-              required
             />
             <label>Hide middle Initial from Directory?</label>
           </div>
@@ -114,6 +91,7 @@ function ProfileInfo() {
               type="text"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
+              required
             />
           </div>
           <div className="flex flex-col px-4 py-2">
@@ -135,7 +113,11 @@ function ProfileInfo() {
             />
           </div>
           <div className="flex flex-row px-4 place-items-center">
-            <input className="mr-2" type="checkbox" onChange={handlePronounChange} />
+            <input
+              className="mr-2"
+              type="checkbox"
+              onChange={handlePronounChange}
+            />
             <label>Hide pronouns from Directory?</label>
           </div>
           <div className="flex flex-col px-4 py-2">
@@ -224,16 +206,16 @@ function ProfileInfo() {
           </div>
           <div className="flex flex-row px-4 py-2">
             <button
-              className="border border-slate-600 rounded-full px-6 m-4"
-              onClick={submitInfoBTC}
+              className="border border-slate-600 rounded-full px-6 m-4 text-xs"
+              onClick={()=>submitInfo("backToChecklist")}
             >
-              Back to Checklist
+              Cancel
             </button>
             <button
-              className="border border-slate-600 rounded-full px-6 m-4"
-              onClick={submitInfoNS}
+              className="border border-slate-600 rounded-full px-6 m-4 text-xs"
+              onClick={()=>submitInfo("backToChecklist")}
             >
-              Next Section
+              Save and Back To Checklist
             </button>
           </div>
         </form>

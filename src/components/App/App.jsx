@@ -21,6 +21,10 @@ import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 import Checklist from '../Checklist/Checklist';
 import ProfileInfo from '../Checklist/ProfileInfo';
+import ContactInfo from '../Checklist/ContactInfo';
+import EmergencyInfo from '../Checklist/EmergencyInfo';
+import AboutInfo from '../Checklist/AboutInfo';
+import SocialInfo from '../Checklist/SocialInfo';
 
 import './App.css';
 
@@ -80,7 +84,34 @@ function App() {
           >
             <ProfileInfo />
           </ProtectedRoute>
-
+          <ProtectedRoute
+            // logged in shows InfoPage else shows LoginPage
+            exact
+            path="/contact-info"
+          >
+            <ContactInfo />
+          </ProtectedRoute>
+          <ProtectedRoute
+            // logged in shows InfoPage else shows LoginPage
+            exact
+            path="/emergency-info"
+          >
+            <EmergencyInfo />
+          </ProtectedRoute>
+          <ProtectedRoute
+            // logged in shows InfoPage else shows LoginPage
+            exact
+            path="/about-info"
+          >
+            <AboutInfo />
+          </ProtectedRoute>
+          <ProtectedRoute
+            // logged in shows InfoPage else shows LoginPage
+            exact
+            path="/social-info"
+          >
+            <SocialInfo />
+          </ProtectedRoute>
           <Route
             exact
             path="/login"
