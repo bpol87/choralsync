@@ -1,15 +1,20 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
 function EmergencyInfo() {
   const user = useSelector((store) => store.user);
+  const userProfile = useSelector(store => store.userProfile)
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const [emergency_name, setEmergencyName] = useState("");
-  const [emergency_relation, setEmergencyRelation] = useState("");
-  const [emergency_phone, setEmergencyPhone] = useState("");
+  useEffect(() => {
+  dispatch({type: "FETCH_USER_PROFILE"})
+}, [])
+  
+  const [emergency_name, setEmergencyName] = useState(userProfile.emergency_name || '');
+  const [emergency_relation, setEmergencyRelation] = useState(userProfile.emergency_relation || "");
+  const [emergency_phone, setEmergencyPhone] = useState(userProfile.emergency_phone || "");
 
   const submitEmergency = (button) => {
     let contactToAdd = {
@@ -20,11 +25,7 @@ function EmergencyInfo() {
 
     dispatch({ type: "SUBMIT_EMERGENCY", payload: contactToAdd });
 
-    if (button === "backToChecklist") {
-      history.push("/checklist");
-    } else if (button === "nextSection") {
-      history.push("/about-info");
-    }
+      history.push("/user");
   };
 
   return (
@@ -72,11 +73,13 @@ function EmergencyInfo() {
           <div className="flex flex-row px-4 py-2">
             <button
               className="border border-slate-600 rounded-full px-6 m-4 text-xs"
-              onClick={() => history.push("/checklist")}
+              onClick={() => history.push("/user")}
+              type="button"
             >
               Cancel
             </button>
             <button
+            type="button"
               className="border border-slate-600 rounded-full px-6 m-4 text-xs"
               onClick={() => submitEmergency("backToChecklist")}
             >

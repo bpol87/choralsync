@@ -1,26 +1,37 @@
 import { InformationCircleIcon } from "@heroicons/react/20/solid";
-import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
 function ProfileInfo() {
+  let userProfile = useSelector((store) => store.userProfile);
   const dispatch = useDispatch();
   const history = useHistory();
+useEffect(() => {
+  dispatch({type: 'FETCH_USER_PROFILE'})
+}, [])
+  const handleDateChange = (timestamp) => {
+    const birthdayFormat = new Intl.DateTimeFormat("en-CA").format(timestamp);
+  };
 
-  const [firstName, setFirstName] = useState("");
-  const [middleInitial, setMiddleInitial] = useState("");
-  const [hideMiddle, setHideMiddle] = useState(false);
-  const [lastName, setLastName] = useState("");
-  const [nickname, setNickname] = useState("");
-  const [pronouns, setPronouns] = useState("");
-  const [hidePronouns, setHidePronouns] = useState(false);
-  const [birthday, setBirthday] = useState("");
-  const [formalName, setFormalName] = useState("");
-  const [shirtSize, setShirtSize] = useState("");
-  const [heightFt, setHeightFt] = useState("");
-  const [heightIn, setHeightIn] = useState("");
-  const [sheetMusic, setSheetMusic] = useState("");
-  const [accessibility, setAccessibility] = useState("");
+  const [firstName, setFirstName] = useState(userProfile.first_name);
+  const [middleInitial, setMiddleInitial] = useState(
+    userProfile.middle_initial
+  );
+  const [hideMiddle, setHideMiddle] = useState(userProfile.hide_middle_initial || '');
+  const [lastName, setLastName] = useState(userProfile.last_name || '');
+  const [nickname, setNickname] = useState(userProfile.nickname || '');
+  const [pronouns, setPronouns] = useState(userProfile.pronouns || '');
+  const [hidePronouns, setHidePronouns] = useState(userProfile.hide_pronouns || '');
+  const [birthday, setBirthday] = useState('');
+  const [formalName, setFormalName] = useState(userProfile.formal_name || '');
+  const [shirtSize, setShirtSize] = useState(userProfile.id || '');
+  const [heightFt, setHeightFt] = useState(userProfile.height_ft || '');
+  const [heightIn, setHeightIn] = useState(userProfile.height_in || '');
+  const [sheetMusic, setSheetMusic] = useState(userProfile.sheet_music || '');
+  const [accessibility, setAccessibility] = useState(userProfile.accessibility || '');
 
   const handlePronounChange = (e) => {
     setHidePronouns(e.target.checked);
@@ -49,7 +60,7 @@ function ProfileInfo() {
     };
 
     dispatch({ type: "SUBMIT_PROFILE", payload: profileToAdd });
-    history.push('/checklist')
+    history.push("/user");
   };
 
   return (
@@ -206,14 +217,16 @@ function ProfileInfo() {
           </div>
           <div className="flex flex-row px-4 py-2">
             <button
+            type="button"
               className="border border-slate-600 rounded-full px-6 m-4 text-xs"
-              onClick={()=>submitInfo("backToChecklist")}
+              onClick={() => history.push("/user")}
             >
               Cancel
             </button>
             <button
+            type="button"
               className="border border-slate-600 rounded-full px-6 m-4 text-xs"
-              onClick={()=>submitInfo("backToChecklist")}
+              onClick={() => submitInfo("backToChecklist")}
             >
               Save and Back To Checklist
             </button>

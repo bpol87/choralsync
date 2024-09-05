@@ -1,16 +1,18 @@
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
 function Checklist() {
+  const dispatch = useDispatch();
     const history = useHistory();
     const user = useSelector(store => store.user)
 
     console.log(user)
 
     const handleClick = (section) => {
+        dispatch({type: "FETCH_USER_PROFILE", payload: user.id})
         history.push(`/${section}`)
     }
 
@@ -18,7 +20,7 @@ function Checklist() {
         if (!userList) {
             return (<button className="border border-slate-600 rounded-full px-6" onClick={() => {handleClick(section)}}> Start </button>)
         } else {
-            return (<button className="border border-slate-600 rounded-full px-6">Edit</button>)
+            return (<button className="border border-slate-600 rounded-full px-6" onClick={() => {handleClick(section)}}>Edit</button>)
         }
     }
 
@@ -36,6 +38,12 @@ function Checklist() {
         } else {
             return(<p className="text-green-600">Completed</p>)
         }
+    }
+
+    const reviewButton = (user) => {
+      if (user.isProfileComplete && user.isContactComplete && user.isEmergencyComplete) {
+        return (<button className="border border-slate-600 rounded-full px-6" onClick={()=>history.push('/review-info')}>Review Profile</button>)
+      }
     }
 
   return (
@@ -83,6 +91,7 @@ function Checklist() {
             </tr>
           </tbody>
         </table>
+        <div>{reviewButton(user)}</div>
       </div>
     </div>
   );

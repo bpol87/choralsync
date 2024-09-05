@@ -1,22 +1,23 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
 function ContactInfo() {
   const user = useSelector((store) => store.user);
+  const userProfile = useSelector(store => store.userProfile)
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const [email, setEmail] = useState(user.username);
+  const [email, setEmail] = useState(userProfile.email || user.username);
   const [hideEmail, setHideEmail] = useState(false);
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState(userProfile.phone || '');
   const [hidePhone, setHidePhone] = useState(false);
-  const [address_1, setAddress_1] = useState("");
-  const [address_2, setAddress_2] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("MN");
-  const [zipCode, setZipCode] = useState("");
-  const [hideAddress, setHideAddress] = useState(false);
+  const [address_1, setAddress_1] = useState(userProfile.street_address_1 || "");
+  const [address_2, setAddress_2] = useState(userProfile.street_address_2 || "");
+  const [city, setCity] = useState(userProfile.city || "");
+  const [state, setState] = useState(userProfile.state || "MN");
+  const [zipCode, setZipCode] = useState(userProfile.zip || "");
+  const [hideAddress, setHideAddress] = useState(userProfile.hide_address || false);
 
   const handleEmailChange = (e) => {
     setHideEmail(e.target.checked);
@@ -46,11 +47,8 @@ function ContactInfo() {
 
     dispatch({ type: "SUBMIT_CONTACT", payload: contactToAdd });
 
-    if (button === "backToChecklist") {
-      history.push('/checklist')
-    } else if (button === "nextSection") {
-      history.push('/emergency-info')
-    }
+      history.push('/user')
+    
   };
 
   return (
@@ -72,6 +70,7 @@ function ContactInfo() {
             <input
               className="mr-2"
               type="checkbox"
+              selected={hideEmail}
               onChange={handleEmailChange}
             />
             <label>Hide Email from Directory?</label>
@@ -129,7 +128,7 @@ function ContactInfo() {
               value={state}
               onChange={(e) => setState(e.target.value)}
             >
-              <option value="MN" selected>
+              <option value="MN">
                 MN
               </option>
               <option value="AL">AL</option>
@@ -197,18 +196,21 @@ function ContactInfo() {
             <input
               className="mr-2"
               type="checkbox"
+              selected={hideAddress}
               onChange={handleAddressChange}
             />
             <label>Hide Address from Directory?</label>
           </div>
           <div className="flex flex-row px-4 py-2">
             <button
+            type="button"
               className="border border-slate-600 rounded-full px-6 m-4 text-xs"
-              onClick={() => history.push("/checklist")}
+              onClick={() => history.push("/user")}
             >
               Cancel
             </button>
             <button
+            type="button"
               className="border border-slate-600 rounded-full px-6 m-4 text-xs"
               onClick={() => submitContact("backToChecklist")}
             >
