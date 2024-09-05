@@ -23,12 +23,12 @@ router.put("/profile-info", async (req, res) => {
       req.body.hide_pronouns,
       req.body.nickname,
       req.body.formal_name,
-      req.body.height_ft,
-      req.body.height_in,
+      req.body.height_ft || null,
+      req.body.height_in || null,
       req.body.birthday,
       req.body.sheet_music,
       req.body.accessibility,
-      req.body.shirt_size_id,
+      req.body.shirt_size_id || null,
       req.user.id,
     ];
     const sectionUpdateQuery = await connection.query(
@@ -183,6 +183,68 @@ router.put("/about-info", async (req, res) => {
   } finally {
     await connection.release();
   }
+});
+
+router.put("/social-info", async (req, res) => {
+  let connection;
+
+  try {
+    connection = await pool.connect();
+    await connection.query("BEGIN;");
+    const aboutSqlQuery = `
+      UPDATE "profile"
+      SET "website_url" = $1, "x_url" = $2, "instagram_url" = $3, "facebook_url" = $4, "linkedin_url" = $5, "tiktok_url" = $6
+      WHERE "user_id" = $7
+      RETURNING "user_id";
+      `;
+    const aboutSqlValues = [
+      req.body.website_url,
+      req.body.x_url,
+      req.body.instagram_url,
+      req.body.facebook_url,
+      req.body.linkedin_url,
+      req.body.tiktok_url,
+      req.user.id,
+    ];
+    const sectionUpdateQuery = await connection.query(
+      aboutSqlQuery,
+      aboutSqlValues
+    );
+    const aboutQueryResults = [sectionUpdateQuery.rows[0].user_id];
+
+    const userSqlQuery = `
+      UPDATE "users"
+      SET "isSocialComplete" = true
+      WHERE "id" = $1;
+      `;
+    await connection.query(userSqlQuery, aboutQueryResults);
+    await connection.query("COMMIT;");
+    res.sendStatus(201);
+  } catch (err) {
+    console.log("PUT /social-info failed:", err);
+    await connection.query("ROLLBACK;");
+    res.sendStatus(500);
+  } finally {
+    await connection.release();
+  }
+});
+
+router.get('/user', (req, res) => {
+  const sqlQuery = `
+  SELECT *, "shirt_size"."size" 
+    FROM "profile"
+    JOIN "shirt_size" ON "profile"."shirt_size_id" = "shirt_size"."id"
+    WHERE "user_id" = $1;
+  `
+const sqlValue = [req.user.id]
+
+pool.query(sqlQuery, sqlValue)
+.then((response) => {
+  res.send(response.rows)
+})
+.catch((err) => {
+console.log('Error Fetching profile:', err)
+});
 });
 
 module.exports = router;

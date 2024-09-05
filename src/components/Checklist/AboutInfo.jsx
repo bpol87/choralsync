@@ -22,7 +22,7 @@ function AboutInfo() {
 
     dispatch({ type: "SUBMIT_ABOUT", payload: aboutToAdd });
 
-      history.push("/checklist");
+      history.push("/user");
    
   };
 
@@ -71,7 +71,7 @@ function AboutInfo() {
           <div className="flex flex-row px-4 py-2">
             <button
               className="border border-slate-600 rounded-full px-6 m-4 text-xs"
-              onClick={() => history.push("/checklist")}
+              onClick={() => history.push("/user")}
             >
               Cancel
             </button>

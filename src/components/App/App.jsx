@@ -27,6 +27,7 @@ import AboutInfo from '../Checklist/AboutInfo';
 import SocialInfo from '../Checklist/SocialInfo';
 
 import './App.css';
+import ReviewProfile from '../Checklist/Review';
 
 function App() {
   const dispatch = useDispatch();
@@ -111,6 +112,13 @@ function App() {
             path="/social-info"
           >
             <SocialInfo />
+          </ProtectedRoute>
+          <ProtectedRoute
+            // logged in shows InfoPage else shows LoginPage
+            exact
+            path="/review-info"
+          >
+            <ReviewProfile />
           </ProtectedRoute>
           <Route
             exact
