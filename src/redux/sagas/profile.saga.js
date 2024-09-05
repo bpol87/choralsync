@@ -71,8 +71,11 @@ function* aboutInfo(action) {
   }
 
   function* submitProfile (action) {
+    const history = action.payload;
     try { 
       const response = yield axios.put('/api/profile/user')
+     if (response) { const profileFetched = yield axios.get('FETCH_USER_PROFILE'); return profileFetched }
+      if (profileFetched) {yield history.push('/user')}
     } catch (err) {
       console.log('Error submitting profile', err)
     }

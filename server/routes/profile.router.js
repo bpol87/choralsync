@@ -250,7 +250,7 @@ console.log('Error Fetching profile:', err)
 router.put('/user', (req, res) => {
   const sqlQuery = `
   UPDATE "users"
-  SET "isChecklistComplete" = true
+  SET "isChecklistCompleted" = true
   WHERE "id" = $1
   `
   const sqlValue = [req.user.id]
