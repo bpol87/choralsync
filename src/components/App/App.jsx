@@ -25,9 +25,11 @@ import ContactInfo from '../Checklist/ContactInfo';
 import EmergencyInfo from '../Checklist/EmergencyInfo';
 import AboutInfo from '../Checklist/AboutInfo';
 import SocialInfo from '../Checklist/SocialInfo';
+import ReviewProfile from '../Checklist/Review';
+import MemberList from '../Members/MembersList';
+import MemberProfile from '../Members/MemberProfile';
 
 import './App.css';
-import ReviewProfile from '../Checklist/Review';
 
 function App() {
   const dispatch = useDispatch();
@@ -36,7 +38,13 @@ function App() {
 
   useEffect(() => {
     dispatch({ type: 'FETCH_USER' });
+    dispatch({ type: 'FETCH_USER_PROFILE'});
   }, [dispatch]);
+
+useEffect(() => {
+    dispatch({type: 'FETCH_USER_PROFILE'})
+    dispatch({ type: "FETCH_MEMBER_CARDS" });
+}, [])
 
   return (
     <Router>
@@ -64,7 +72,7 @@ function App() {
             exact
             path="/user"
           >
-            {!user.isChecklistComplete ?
+            {!user.isChecklistCompleted ?
               <Checklist />
             :
             <UserPage />}
@@ -119,6 +127,20 @@ function App() {
             path="/review-info"
           >
             <ReviewProfile />
+          </ProtectedRoute>
+          <ProtectedRoute
+            // logged in shows InfoPage else shows LoginPage
+            exact
+            path="/members"
+          >
+            <MemberList />
+          </ProtectedRoute>
+          <ProtectedRoute
+            // logged in shows InfoPage else shows LoginPage
+            exact
+            path="/members/:id"
+          >
+            <MemberProfile />
           </ProtectedRoute>
           <Route
             exact

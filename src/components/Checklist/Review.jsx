@@ -27,8 +27,7 @@ function ReviewProfile() {
   };
 
   const submitProfile = () => {
-    dispatch({ type: "SUBMIT_FULL_PROFILE" });
-    history.push("/user");
+    dispatch({ type: "SUBMIT_FULL_PROFILE", payload: history });
   };
 
   return (
@@ -119,11 +118,9 @@ function ReviewProfile() {
                 </div>
                 <div className="py-2">
                   <p className="font-bold">Email:</p>
-                  <p>
                     {userProfile.hide_email && (
                       <p className="text-slate-500">(hidden from directory)</p>
                     )}
-                  </p>
                   <p>{userProfile.email}</p>
                 </div>
                 <div className="py-2">
@@ -215,7 +212,7 @@ function ReviewProfile() {
             </button>
             <button
               className="border border-teal-700 text-white bg-teal-700 shadow-md shadow-slate-600 active:shadow-none active:translate-x-px active:translate-y-px rounded-full px-8 py-1 m-4 text-sm"
-              onClick={() => submitProfile}
+              onClick={() => submitProfile()}
             >
               Submit Profile
             </button>
