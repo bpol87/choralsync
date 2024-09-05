@@ -247,4 +247,21 @@ console.log('Error Fetching profile:', err)
 });
 });
 
+router.put('/user', (req, res) => {
+  const sqlQuery = `
+  UPDATE "users"
+  SET "isChecklistComplete" = true
+  WHERE "id" = $1
+  `
+  const sqlValue = [req.user.id]
+
+  pool.query(sqlQuery, sqlValue)
+  .then((response) => {
+    res.sendStatus(201)
+  })
+  .catch((err) => {
+    console.log('Error /api/profile/user on submit', err)
+    res.sendStatus(500);
+  })
+});
 module.exports = router;

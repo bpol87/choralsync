@@ -25,8 +25,8 @@ function SocialInfo() {
     };
 
     dispatch({ type: "SUBMIT_SOCIAL", payload: socialToAdd });
-    
-      history.push("/user");
+
+    history.push("/user");
   };
 
   return (
@@ -90,6 +90,7 @@ function SocialInfo() {
           </div>
           <div className="flex flex-row px-4 py-2">
             <button
+              type="button"
               className="border border-slate-600 rounded-full px-6 m-4 text-xs"
               onClick={() => history.push("/user")}
             >
@@ -98,6 +99,7 @@ function SocialInfo() {
             <button
               className="border border-slate-600 rounded-full px-6 m-4 text-xs"
               onClick={() => submitEmergency("backToChecklist")}
+              type="button"
             >
               Save and Back To Checklist
             </button>

@@ -70,12 +70,14 @@ function AboutInfo() {
           </div>
           <div className="flex flex-row px-4 py-2">
             <button
+            type="button"
               className="border border-slate-600 rounded-full px-6 m-4 text-xs"
               onClick={() => history.push("/user")}
             >
               Cancel
             </button>
             <button
+            type="button"
               className="border border-slate-600 rounded-full px-6 m-4 text-xs"
               onClick={() => submitAbout("backToChecklist")}
             >

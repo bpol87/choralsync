@@ -9,7 +9,9 @@ function ProfileInfo() {
   let userProfile = useSelector((store) => store.userProfile);
   const dispatch = useDispatch();
   const history = useHistory();
-
+useEffect(() => {
+  dispatch({type: 'FETCH_USER_PROFILE'})
+}, [])
   const handleDateChange = (timestamp) => {
     const birthdayFormat = new Intl.DateTimeFormat("en-CA").format(timestamp);
   };
@@ -215,12 +217,14 @@ function ProfileInfo() {
           </div>
           <div className="flex flex-row px-4 py-2">
             <button
+            type="button"
               className="border border-slate-600 rounded-full px-6 m-4 text-xs"
               onClick={() => history.push("/user")}
             >
               Cancel
             </button>
             <button
+            type="button"
               className="border border-slate-600 rounded-full px-6 m-4 text-xs"
               onClick={() => submitInfo("backToChecklist")}
             >

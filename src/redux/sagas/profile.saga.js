@@ -70,6 +70,14 @@ function* aboutInfo(action) {
     }
   }
 
+  function* submitProfile (action) {
+    try { 
+      const response = yield axios.put('/api/profile/user')
+    } catch (err) {
+      console.log('Error submitting profile', err)
+    }
+  }
+
 function* profileSaga() {
   yield takeLatest("SUBMIT_PROFILE", profileInfo)
   yield takeLatest("SUBMIT_CONTACT", contactInfo)
@@ -77,6 +85,7 @@ function* profileSaga() {
   yield takeLatest("SUBMIT_ABOUT", aboutInfo)
   yield takeLatest("SUBMIT_SOCIAL", socialInfo)
   yield takeLatest("FETCH_USER_PROFILE", fetchUserProfile)
+  yield takeLatest("SUBMIT_FULL_PROFILE", submitProfile)
 }
 
 export default profileSaga;

@@ -5,15 +5,30 @@ import { UserCircleIcon } from "@heroicons/react/24/outline";
 
 function ReviewProfile() {
   const history = useHistory();
+  const dispatch = useDispatch();
   const userProfile = useSelector((store) => store.userProfile);
   console.log(userProfile);
 
+  useEffect(() => {
+    dispatch({ type: "FETCH_USER_PROFILE" });
+  }, []);
+
   const phoneFormat = (phoneString) => {
-    const newPhoneFormat = phoneString.replace(
-      /(\d{3})(\d{3})(\d{4})/,
-      "$1-$2-$3"
-    );
-    return newPhoneFormat;
+    if (phoneString) {
+      const newPhoneFormat = phoneString.replace(
+        /(\d{3})(\d{3})(\d{4})/,
+        "$1-$2-$3"
+      );
+      return newPhoneFormat;
+    } else {
+      return "";
+    }
+    return;
+  };
+
+  const submitProfile = () => {
+    dispatch({ type: "SUBMIT_FULL_PROFILE" });
+    history.push("/user");
   };
 
   return (
@@ -32,16 +47,14 @@ function ReviewProfile() {
                 <div className="py-2">
                   <p className="font-bold">Name:</p>
                   <p>
-                    {userProfile.first_name} {userProfile.middle_initial}.{" "}
+                    {userProfile.first_name} {userProfile.middle_initial}{" "}
                     {userProfile.last_name}
                   </p>
                 </div>
                 <div className="py-2">
                   <p className="font-bold">Pronouns:</p>
-                  {userProfile.hide_pronouns ? (
+                  {userProfile.hide_pronouns && (
                     <p className="text-slate-500">(hidden from directory)</p>
-                  ) : (
-                    ""
                   )}
                   <p>{userProfile.pronouns}</p>
                 </div>
@@ -86,13 +99,12 @@ function ReviewProfile() {
                   <h3 className="items-start text-xl font-bold">
                     Emergency Contact:
                   </h3>
-                  <button className="text-right">Edit Section</button>
                 </div>
                 <div className="py-2">
                   <p>Emergency Contact Info:</p>
                   <p>
-                    {userProfile.emergency_name} (
-                    {userProfile.emergency_relation})
+                    {userProfile.emergency_name} &#40;
+                    {userProfile.emergency_relation}&#41;
                   </p>
                   <p>{phoneFormat(userProfile.emergency_phone)}</p>
                 </div>
@@ -104,35 +116,28 @@ function ReviewProfile() {
                   <h3 className="items-start text-xl font-bold">
                     Contact Information:
                   </h3>
-                  <button className="text-right">Edit Section</button>
                 </div>
                 <div className="py-2">
                   <p className="font-bold">Email:</p>
                   <p>
-                    {userProfile.hide_email ? (
+                    {userProfile.hide_email && (
                       <p className="text-slate-500">(hidden from directory)</p>
-                    ) : (
-                      ""
                     )}
                   </p>
                   <p>{userProfile.email}</p>
                 </div>
                 <div className="py-2">
                   <p className="font-bold">Phone:</p>
-                  {userProfile.hide_phone ? (
+                  {userProfile.hide_phone && (
                     <p className="text-slate-500">(hidden from directory)</p>
-                  ) : (
-                    ""
                   )}
                   <p>{phoneFormat(userProfile.phone)}</p>
                 </div>
                 <div className="py-2">
                   <p className="font-bold">Address:</p>
                   <p>{userProfile.street_address_1}</p>
-                  {userProfile.street_address_2 ? (
+                  {userProfile.street_address_2 && (
                     <p>{userProfile.street_address_2}</p>
-                  ) : (
-                    ""
                   )}
                   <p>
                     {userProfile.city}, {userProfile.state} {userProfile.zip}
@@ -142,7 +147,6 @@ function ReviewProfile() {
               <div className=" w-96 mb-4 p-4 shadow-md border border-teal-700 rounded-lg">
                 <div className="flex flex-row space-x-10">
                   <h3 className="items-start text-xl font-bold">About Me:</h3>
-                  <button className="text-right">Edit Section</button>
                 </div>
                 <div className="py-2">
                   <p className="font-bold">About:</p>
@@ -166,7 +170,6 @@ function ReviewProfile() {
                   <h3 className="items-start text-xl font-bold">
                     Social Media:
                   </h3>
-                  <button className="text-right">Edit Section</button>
                 </div>
                 <div className="py-2">
                   <p className="font-bold">Personal Website:</p>
@@ -210,7 +213,10 @@ function ReviewProfile() {
             >
               Back to Checklist
             </button>
-            <button className="border border-teal-700 text-white bg-teal-700 shadow-md shadow-slate-600 active:shadow-none active:translate-x-px active:translate-y-px rounded-full px-8 py-1 m-4 text-sm">
+            <button
+              className="border border-teal-700 text-white bg-teal-700 shadow-md shadow-slate-600 active:shadow-none active:translate-x-px active:translate-y-px rounded-full px-8 py-1 m-4 text-sm"
+              onClick={() => submitProfile}
+            >
               Submit Profile
             </button>
           </div>
