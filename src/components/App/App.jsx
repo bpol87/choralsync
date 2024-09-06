@@ -28,6 +28,7 @@ import SocialInfo from '../Checklist/SocialInfo';
 import ReviewProfile from '../Checklist/Review';
 import MemberList from '../Members/MembersList';
 import MemberProfile from '../Members/MemberProfile';
+import EditProfile from '../EditProfile/EditProfile';
 
 import './App.css';
 
@@ -141,6 +142,13 @@ useEffect(() => {
             path="/members/:id"
           >
             <MemberProfile />
+            </ProtectedRoute>
+            <ProtectedRoute
+            // logged in shows InfoPage else shows LoginPage
+            exact
+            path="/edit-profile"
+          >
+            <EditProfile />
           </ProtectedRoute>
           <Route
             exact

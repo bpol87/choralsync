@@ -1,7 +1,5 @@
 import { InformationCircleIcon } from "@heroicons/react/20/solid";
 import { useDispatch, useSelector } from "react-redux";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -14,6 +12,7 @@ useEffect(() => {
 }, [])
   const handleDateChange = (timestamp) => {
     const birthdayFormat = new Intl.DateTimeFormat("en-CA").format(timestamp);
+    return birthdayFormat;
   };
 
   const [firstName, setFirstName] = useState(userProfile.first_name);
@@ -136,7 +135,7 @@ useEffect(() => {
             <input
               className="border rounded-md shadow-sm"
               type="date"
-              value={birthday}
+              value={handleDateChange(birthday)}
               onChange={(e) => setBirthday(e.target.value)}
             />
           </div>

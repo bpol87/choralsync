@@ -26,4 +26,26 @@ router.get("/cards", (req, res) => {
     });
 });
 
+router.get('/:id', (req, res) => {
+  const memberId = [req.params.id]
+
+  const sqlQuery = `
+  SELECT "profile".id AS "member_id", *, "shirt_size".size AS "shirt_size", "section".voice_section, "part".part AS "upper-lower", "status".status AS "singer_status" FROM "profile"
+  JOIN "shirt_size" ON "profile".shirt_size_id = "shirt_size".id
+  JOIN "section" ON "profile".section_id = "section".id
+  JOIN "part" ON "profile".part_id = "part".id
+  JOIN "status" ON "profile".status_id = "status".id
+  WHERE "profile"."id" = $1
+  `
+
+  pool.query(sqlQuery, memberId)
+  .then((response) => {
+    res.send(response.rows[0])
+  })
+  .catch((dbErr) => {
+    console.log('Server error fetching member:', dbErr)
+    res.sendStatus(500);
+  })
+})
+
 module.exports = router;

@@ -10,8 +10,19 @@ function* memberCards (action) {
     }
 }
 
+function* fetchMemberProfile (action) {
+    const memberId = action.payload
+
+    const response = yield axios.get(`/api/members/${memberId}`)
+
+    const memberProfile = response.data
+
+    yield put({type: 'SET_MEMBER', payload: memberProfile})
+}
+
 function* membersSaga () {
     yield takeLatest('FETCH_MEMBER_CARDS', memberCards)
+    yield takeLatest('FETCH_MEMBER', fetchMemberProfile)
 }
 
 export default membersSaga;

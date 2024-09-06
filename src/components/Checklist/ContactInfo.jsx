@@ -128,9 +128,7 @@ function ContactInfo() {
               value={state}
               onChange={(e) => setState(e.target.value)}
             >
-              <option value="MN">
-                MN
-              </option>
+              <option value="MN">MN</option>
               <option value="AL">AL</option>
               <option value="AK">AK</option>
               <option value="AZ">AZ</option>
