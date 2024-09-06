@@ -107,10 +107,20 @@ function EditProfile() {
                 </div>
               </div>
             </div>
+            <div className="flex flex-col">
+                <label>Sheet Music Preference:</label>
+                <select
+                  className="border border-slate-300 rounded-md py-2"
+                  placeholder="john_doe.example.com"
+                >
+                    <option value='printed'>Printed</option>
+                    <option value='digital'>Digital</option>
+                </select>
+            </div>
             <p className="font-bold text-lg pt-2 self-start">
               Contact Information:
             </p>
-            <div className="flex flex-row w-full">
+            <div className="flex flex-row w-full py-2">
               <div className="flex flex-col w-full mr-2">
                 <label>Email Address:</label>
                 <input
@@ -236,7 +246,7 @@ function EditProfile() {
               Emergency Contact Information:
             </p>
             <div className="flex flex-col w-full">
-              <div className="flex flex-row">
+              <div className="flex flex-row py-2">
                 <div className="flex flex-col w-full">
                   <label>Emergency Contact Name:</label>
                   <input
@@ -245,7 +255,7 @@ function EditProfile() {
                   ></input>
                 </div>
                 <div className="flex flex-col w-40 ml-4">
-                  <label>Relation To Member:</label>
+                  <label>Relation:</label>
                   <select
                     className="border border-slate-300 rounded-md py-2 pl-4"
                     placeholder="Full Name"
@@ -259,7 +269,7 @@ function EditProfile() {
                   </select>
                 </div>
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col py-2">
               <label>Emergency Contact Phone:</label>
                   <input
                     className="border border-slate-300 rounded-md py-2 pl-4"
@@ -267,7 +277,6 @@ function EditProfile() {
                   ></input>
               </div>
             </div>
-
             <div className="flex flex-row p-4 w-full justify-end">
               <button className="mx-2 px-6 py-1 border border-teal-700 text-teal-700 rounded-full">
                 Cancel
