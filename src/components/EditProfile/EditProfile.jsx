@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 function EditProfile() {
+  const memberToEdit = useSelector(store => store.members.memberProfile)
   const handleDateChange = (timestamp) => {
     const birthdayFormat = new Intl.DateTimeFormat("en-CA").format(timestamp);
     return birthdayFormat;
@@ -277,6 +278,37 @@ function EditProfile() {
                   ></input>
               </div>
             </div>
+            <p className="font-bold text-lg pt-2 self-start">
+              About Me:
+            </p>
+            <div className="flex flex-col py-2 w-full">
+              <label>About:</label>
+                  <textarea
+                    className="border border-slate-300 rounded-md py-2 pl-4"
+                    placeholder="Full Name"
+                  ></textarea>
+              </div>
+              <div className="flex flex-col py-2 w-full">
+              <label>Fun Fact:</label>
+                  <textarea
+                    className="border border-slate-300 rounded-md py-2 pl-4"
+                    placeholder="Full Name"
+                  ></textarea>
+              </div>
+              <div className="flex flex-col py-2 w-full">
+              <label>Employer:</label>
+                  <textarea
+                    className="border border-slate-300 rounded-md py-2 pl-4"
+                    placeholder="Full Name"
+                  ></textarea>
+              </div>
+              <div className="flex flex-col py-2 w-full">
+              <label>Occupation:</label>
+                  <textarea
+                    className="border border-slate-300 rounded-md py-2 pl-4"
+                    placeholder="Full Name"
+                  ></textarea>
+              </div>
             <div className="flex flex-row p-4 w-full justify-end">
               <button className="mx-2 px-6 py-1 border border-teal-700 text-teal-700 rounded-full">
                 Cancel

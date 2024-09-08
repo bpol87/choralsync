@@ -16,7 +16,6 @@ function MemberProfile() {
       type: "FETCH_MEMBER",
       payload: memberId,
     });
-    return () => {dispatch({type: 'UNSET_MEMBER'})}
   }, []);
   const memberProfile = useSelector((store) => store.members.memberProfile);
 
