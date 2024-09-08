@@ -90,6 +90,7 @@ useEffect(() => {
             <input
               className="mr-2"
               type="checkbox"
+              checked={hideMiddle}
               onChange={handleMiddleChange}
             />
             <label>Hide middle Initial from Directory?</label>
@@ -126,6 +127,7 @@ useEffect(() => {
             <input
               className="mr-2"
               type="checkbox"
+              checked={hidePronouns}
               onChange={handlePronounChange}
             />
             <label>Hide pronouns from Directory?</label>
