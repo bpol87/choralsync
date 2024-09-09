@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 function EditProfile() {
+  const navigate = useNavigate();
   const memberToEdit = useSelector((store) => store.members.memberProfile);
   const user = useSelector((store) => store.user);
 
@@ -105,6 +106,10 @@ function EditProfile() {
       return "";
     }
   };
+
+const handleGoBack = () => {
+  navigate(-1);
+}
 
   const submitEditsToMember = (event) => {
     event.preventDefault();
@@ -597,7 +602,8 @@ function EditProfile() {
               ></input>
             </div>
             <div className="flex flex-row p-4 w-full justify-end">
-              <button className="mx-2 px-6 py-1 border border-teal-700 text-teal-700 rounded-full">
+              <button className="mx-2 px-6 py-1 border border-teal-700 text-teal-700 rounded-full"
+              onClick={handleGoBack}>
                 Cancel
               </button>
               <button className="mx-2 px-6 py-1 bg-teal-700 rounded-full text-white">

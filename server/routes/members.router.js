@@ -9,7 +9,8 @@ router.get("/cards", (req, res) => {
         profile.first_name, 
         profile.last_name, 
         profile.email, 
-        profile.phone, 
+        profile.phone,
+        profile.profile_photo_url, 
         section.voice_section, 
         part.part
         FROM "profile"

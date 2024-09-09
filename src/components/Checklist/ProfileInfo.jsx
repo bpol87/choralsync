@@ -1,36 +1,39 @@
 import { InformationCircleIcon } from "@heroicons/react/20/solid";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useNavigate } from "react-router-dom";
+import { useDropzone } from "react-dropzone";
 
 function ProfileInfo() {
   let userProfile = useSelector((store) => store.userProfile);
   const dispatch = useDispatch();
   const history = useHistory();
-useEffect(() => {
-  dispatch({type: 'FETCH_USER_PROFILE'})
-}, [])
+  const [file, setFile] = useState(null);
+
+  // Initialize state with userProfile values
+  const [firstName, setFirstName] = useState(userProfile.first_name || "");
+  const [middleInitial, setMiddleInitial] = useState(userProfile.middle_initial || "");
+  const [hideMiddle, setHideMiddle] = useState(userProfile.hide_middle_initial || false);
+  const [lastName, setLastName] = useState(userProfile.last_name || "");
+  const [nickname, setNickname] = useState(userProfile.nickname || "");
+  const [pronouns, setPronouns] = useState(userProfile.pronouns || "");
+  const [hidePronouns, setHidePronouns] = useState(userProfile.hide_pronouns || false);
+  const [birthday, setBirthday] = useState(userProfile.birthday || "");
+  const [formalName, setFormalName] = useState(userProfile.formal_name || "");
+  const [shirtSize, setShirtSize] = useState(userProfile.shirt_size_id || "");
+  const [heightFt, setHeightFt] = useState(userProfile.height_ft || "");
+  const [heightIn, setHeightIn] = useState(userProfile.height_in || "");
+  const [sheetMusic, setSheetMusic] = useState(userProfile.sheet_music || "");
+  const [accessibility, setAccessibility] = useState(userProfile.accessibility || "");
+
+  useEffect(() => {
+    dispatch({ type: "FETCH_USER_PROFILE" });
+  }, [dispatch]);
+
   const handleDateChange = (timestamp) => {
     const birthdayFormat = new Intl.DateTimeFormat("en-CA").format(timestamp);
     return birthdayFormat;
   };
-
-  const [firstName, setFirstName] = useState(userProfile.first_name);
-  const [middleInitial, setMiddleInitial] = useState(
-    userProfile.middle_initial
-  );
-  const [hideMiddle, setHideMiddle] = useState(userProfile.hide_middle_initial || '');
-  const [lastName, setLastName] = useState(userProfile.last_name || '');
-  const [nickname, setNickname] = useState(userProfile.nickname || '');
-  const [pronouns, setPronouns] = useState(userProfile.pronouns || '');
-  const [hidePronouns, setHidePronouns] = useState(userProfile.hide_pronouns || '');
-  const [birthday, setBirthday] = useState('');
-  const [formalName, setFormalName] = useState(userProfile.formal_name || '');
-  const [shirtSize, setShirtSize] = useState(userProfile.id || '');
-  const [heightFt, setHeightFt] = useState(userProfile.height_ft || '');
-  const [heightIn, setHeightIn] = useState(userProfile.height_in || '');
-  const [sheetMusic, setSheetMusic] = useState(userProfile.sheet_music || '');
-  const [accessibility, setAccessibility] = useState(userProfile.accessibility || '');
 
   const handlePronounChange = (e) => {
     setHidePronouns(e.target.checked);
@@ -56,15 +59,26 @@ useEffect(() => {
       height_in: heightIn,
       sheet_music: sheetMusic,
       accessibility: accessibility,
+      photo: file,
     };
 
     dispatch({ type: "SUBMIT_PROFILE", payload: profileToAdd });
     history.push("/user");
   };
 
+  const handleDrop = (acceptedFiles) => {
+    setFile(acceptedFiles[0]);
+  };
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop: handleDrop,
+    accept: "image/*",
+    maxSize: 10 * 1024 * 1024, // 10MB
+  });
+
   return (
     <div className="flex flex-col items-center px-4 py-2 text-sm">
-      <div className=" flex flex-col items-center border-1 border-slate-600 rounded-lg shadow-md bg-white">
+      <div className="flex flex-col items-center border-1 border-slate-600 rounded-lg shadow-md bg-white">
         <h2 className="text-lg font-bold">Profile Information</h2>
         <form>
           <div className="flex flex-col px-4 py-2">
@@ -137,7 +151,7 @@ useEffect(() => {
             <input
               className="border rounded-md shadow-sm"
               type="date"
-              value={handleDateChange(birthday)}
+              value={birthday}
               onChange={(e) => setBirthday(e.target.value)}
             />
           </div>
@@ -206,26 +220,38 @@ useEffect(() => {
             </select>
           </div>
           <div className="flex flex-col px-4 py-2">
-            <label className="flex flex-row items-center">
-              Accessibility Accomodations:
-              <InformationCircleIcon className="size-4 text-teal-800 ml-1" />
-            </label>
+            <label>Accessibility Information:</label>
             <textarea
               className="border rounded-md shadow-sm"
+              rows="3"
               value={accessibility}
               onChange={(e) => setAccessibility(e.target.value)}
-            ></textarea>
+            />
+          </div>
+          <div className="flex flex-col px-4 py-2">
+            <label>Profile Photo:</label>
+            <div
+              {...getRootProps()}
+              className="border-dashed border-2 border-gray-300 p-4 rounded-md"
+            >
+              <input {...getInputProps()} />
+              {file ? (
+                <p className="text-center">File selected: {file.name}</p>
+              ) : (
+                <p className="text-center">Drag 'n' drop a file here, or click to select one</p>
+              )}
+            </div>
           </div>
           <div className="flex flex-row px-4 py-2">
             <button
-            type="button"
+              type="button"
               className="border border-slate-600 rounded-full px-6 m-4 text-xs"
               onClick={() => history.push("/user")}
             >
               Cancel
             </button>
             <button
-            type="button"
+              type="button"
               className="border border-slate-600 rounded-full px-6 m-4 text-xs"
               onClick={() => submitInfo("backToChecklist")}
             >

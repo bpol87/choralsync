@@ -20,9 +20,22 @@ function MemberItem(props) {
     history.push(`/members/${memberId}`)
   }
 
+  const handlePhoto = () => {
+    
+      if (props.user.profile_photo_url) {
+        let photoUrl = props.user.profile_photo_url;
+
+        return (<img src={photoUrl} className="bg-teal-600 self-center rounded-t-md" />)
+      } else {
+        return (
+          <UserCircleIcon className="size-32 w-full h-60 bg-teal-600 self-center rounded-t-md" />
+        )
+      }
+  }
+
   return (
     <div className="border border-teal-700 rounded-md m-4 w-60 flex flex-col shadow-lg" onClick={()=>handleCardClick(props.user.id)}>
-      <UserCircleIcon className="size-32 w-full h-60 bg-teal-600 self-center rounded-t-md" />
+      {handlePhoto()}
       <div className="p-4">
         <p className="font-bold py-2 text-lg text-start">
           {props.user.first_name} {props.user.last_name}

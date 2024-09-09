@@ -3,11 +3,12 @@ import axios from "axios";
 
 function* profileInfo(action) {
   try {
-    const response = yield axios.put(
-      "/api/profile/profile-info",
-      action.payload
-    );
-    yield put({type: "FETCH_USER"})
+    const response = yield axios.put("/api/profile/profile-info", action.payload, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    yield put({ type: "FETCH_USER" });
   } catch (err) {
     console.log("Set Profile error:", err);
   }
@@ -70,14 +71,18 @@ function* aboutInfo(action) {
     }
   }
 
-  function* submitProfile (action) {
+  function* submitProfile(action) {
     const history = action.payload;
     try { 
-      const response = yield axios.put('/api/profile/user')
-     if (response) { const profileFetched = yield axios.get('FETCH_USER_PROFILE'); return profileFetched }
-      if (profileFetched) {yield history.push('/user')}
+      const response = yield axios.put('/api/profile/user');
+      if (response) { 
+        const profileFetched = yield axios.get('/api/profile/user'); 
+        if (profileFetched) {
+          yield history.push('/user');
+        }
+      }
     } catch (err) {
-      console.log('Error submitting profile', err)
+      console.log('Error submitting profile', err);
     }
   }
 

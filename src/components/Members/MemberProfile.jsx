@@ -151,6 +151,20 @@ const showEdit = () => {
     }
 }
 
+const handlePhoto = () => {
+    
+  if (memberProfile.profile_photo_url) {
+    let photoUrl = memberProfile.profile_photo_url;
+
+    return (<img src={photoUrl} className="bg-teal-600 self-start rounded-t-md m-4 w-60" />)
+  } else {
+    return (
+      <UserCircleIcon className="size-32 w-full h-60 bg-teal-600 self-center rounded-t-md" />
+    )
+  }
+}
+
+
 const handleClick = () => {
     history.push('/members')
 }
@@ -161,7 +175,9 @@ const handleClick = () => {
       <div className="flex flex-col items-center px-6 py-6 text-sm">
         <div className=" flex flex-row items-start border-1 border-slate-600 rounded-lg shadow-md bg-white px-6 py-4">
           <div className="flex flex-col w-72 text-xs">
-            <UserCircleIcon className="size-52 self-center" />
+            <div className="mr-4">
+            {handlePhoto()}
+            </div>
             <div className="py-2">
               <p className="font-bold">About:</p>
               <p>{memberProfile.about}</p>
