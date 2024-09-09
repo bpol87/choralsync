@@ -20,9 +20,18 @@ function* fetchMemberProfile (action) {
     yield put({type: 'SET_MEMBER', payload: memberProfile})
 }
 
+function* editMember(action) {
+    const memberToEdit = action.payload
+    const memberUser = action.payload.userId
+
+    const response = yield axios.put(`/api/members/edit/${memberUser}`, action.payload)
+    yield put({type: 'FETCH_MEMBER', payload: memberUser})
+}
+
 function* membersSaga () {
     yield takeLatest('FETCH_MEMBER_CARDS', memberCards)
     yield takeLatest('FETCH_MEMBER', fetchMemberProfile)
+    yield takeLatest('SUBMIT_EDITS_TO_MEMBER', editMember)
 }
 
 export default membersSaga;

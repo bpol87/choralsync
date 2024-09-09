@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 function EditProfile() {
   const memberToEdit = useSelector((store) => store.members.memberProfile);
   const user = useSelector((store) => store.user);
+  const dispatch = useDispatch();
 
   const [firstName, setFirstName] = useState(memberToEdit.first_name);
   const [middleInitial, setMiddleInitial] = useState(
@@ -107,7 +108,6 @@ function EditProfile() {
   };
 
   const submitEditsToMember = (event) => {
-    event.preventDefault();
 
     let memberToUpdate = {
       email: email,
@@ -146,14 +146,15 @@ function EditProfile() {
       tiktok_url: tiktok_url,
       sheet_music: sheetMusic,
       accessibility: accessibility,
+      userId: user.id
     };
 
-    dispatchEvent({type: 'SUBMIT_EDITS_TO_MEMBER', payload: memberToUpdate})
+    dispatch({type: 'SUBMIT_EDITS_TO_MEMBER', payload: memberToUpdate})
   };
 
   return (
     <div className="flex flex-col items-center p-6">
-      <div className="bg-white flex flex-col w-fit p-6 rounded-lg">
+      <div className="bg-white flex flex-col w-fit p-6 rounded-lg shadow-lg">
         <h2 className="text-3xl font-bold">Edit Profile</h2>
         <form className="text-xs">
           <p className="font-bold text-lg pt-2">Personal Information:</p>
@@ -211,7 +212,7 @@ function EditProfile() {
                 <label>Pronouns:</label>
                 <input
                   className="border border-slate-300 rounded-md py-2 pl-4"
-                  placeholder="He/Him, They/Them, She/Her, etc."
+                  placeholder="He/Him..."
                   value={pronouns}
                   onChange={(e) => setPronouns(e.target.value)}
                 ></input>
@@ -600,7 +601,8 @@ function EditProfile() {
               <button className="mx-2 px-6 py-1 border border-teal-700 text-teal-700 rounded-full">
                 Cancel
               </button>
-              <button className="mx-2 px-6 py-1 bg-teal-700 rounded-full text-white">
+              <button className="mx-2 px-6 py-1 bg-teal-700 rounded-full text-white"
+                type="button" onClick={()=> submitEditsToMember()}>
                 Submit Changes
               </button>
             </div>
