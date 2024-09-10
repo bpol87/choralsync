@@ -359,10 +359,47 @@ router.put('/edit' , upload.single("photo"), async (req, res) => {
 
     // Update profile information
     const profileSqlQuery = `
-      UPDATE "profile"
-      SET "first_name" = $1, "last_name" = $2, "middle_initial" = $3, "hide_middle_initial" = $4, "pronouns" = $5, "hide_pronouns" = $6, "nickname" = $7, "formal_name" = $8, "height_ft" = $9, "height_in" = $10, "birthday" = $11, "sheet_music" = $12, "accessibility" = $13, "shirt_size_id" = $14, "profile_photo_url" = $15
-      WHERE "user_id" = $16
-      RETURNING "user_id";
+      UPDATE profile
+        SET 
+        email = $1,
+        hide_email = $2,
+        first_name = $3,
+        last_name = $4,
+        middle_initial = $5,
+        hide_middle_initial = $6,
+        pronouns = $7,
+        hide_pronouns = $8,
+        nickname = $9,
+        formal_name = $10,
+        street_address_1 = $11,
+        street_address_2 = $12,
+        city = $13,
+        state = $14,
+        zip = $15,
+        hide_address = $16,
+        emergency_name = $17,
+        emergency_relation = $18,
+        emergency_phone = $19,
+        height_ft = $20,
+        height_in = $21,
+        birthday = $22,
+        phone = $23,
+        hide_phone = $24,
+        about = $25,
+        fun_fact = $26,
+        employer = $27,
+        occupation = $28,
+        website_url = $29,
+        x_url = $30,
+        instagram_url = $31,
+        facebook_url = $32,
+        linkedin_url = $33,
+        tiktok_url = $34,
+        sheet_music = $35,
+        accessibility = $36,
+        profile_photo_url = $37
+        shirt_size_id = $38
+      WHERE user_id = $39;
     `;
     const profileSqlValues = [
       req.body.email,
