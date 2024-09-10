@@ -86,6 +86,17 @@ function* aboutInfo(action) {
     }
   }
 
+  function* editProfile (action) {
+    try {
+      const response = yield axios.put('/api/profile/edit', action.payload, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })} catch (error) {
+
+    }
+  }
+
 function* profileSaga() {
   yield takeLatest("SUBMIT_PROFILE", profileInfo)
   yield takeLatest("SUBMIT_CONTACT", contactInfo)
@@ -94,6 +105,7 @@ function* profileSaga() {
   yield takeLatest("SUBMIT_SOCIAL", socialInfo)
   yield takeLatest("FETCH_USER_PROFILE", fetchUserProfile)
   yield takeLatest("SUBMIT_FULL_PROFILE", submitProfile)
+  yield takeLatest('SUBMIT_EDITS_TO_MEMBER', editProfile)
 }
 
 export default profileSaga;

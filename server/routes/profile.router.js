@@ -326,4 +326,99 @@ router.put("/user", (req, res) => {
     });
 });
 
+//Handle full profile update
+router.put('/edit' , upload.single("photo"), async (req, res) => {
+  let connection;
+
+  try {
+    connection = await pool.connect();
+    await connection.query("BEGIN;");
+
+    // Handle photo upload to S3
+    let photoUrl = null;
+    if (req.file) {
+      const photoKey = `uploads/${Date.now()}_${path.basename(
+        req.file.originalname
+      )}`;
+
+      // Upload file to S3
+      await s3Client.send(
+        new PutObjectCommand({
+          Bucket: BUCKET_NAME,
+          Key: photoKey,
+          Body: req.file.buffer,
+          ContentType: req.file.mimetype,
+        })
+      );
+      
+
+      // Generate the photo URL
+      photoUrl = `https://${BUCKET_NAME}.s3.amazonaws.com/${photoKey}`;
+      await connection.query(userSqlQuery, socialQueryResults);
+    }
+
+    // Update profile information
+    const profileSqlQuery = `
+      UPDATE "profile"
+      SET "first_name" = $1, "last_name" = $2, "middle_initial" = $3, "hide_middle_initial" = $4, "pronouns" = $5, "hide_pronouns" = $6, "nickname" = $7, "formal_name" = $8, "height_ft" = $9, "height_in" = $10, "birthday" = $11, "sheet_music" = $12, "accessibility" = $13, "shirt_size_id" = $14, "profile_photo_url" = $15
+      WHERE "user_id" = $16
+      RETURNING "user_id";
+    `;
+    const profileSqlValues = [
+      req.body.email,
+      req.body.hide_email,
+      req.body.first_name,
+      req.body.last_name,
+      req.body.middle_initial,
+      req.body.hide_middle_initial,
+      req.body.pronouns,
+      req.body.hide_pronouns,
+      req.body.nickname,
+      req.body.formal_name,
+      req.body.street_address_1,
+      req.body.street_address_2,
+      req.body.city,
+      req.body.state,
+      req.body.zip,
+      req.body.hide_address,
+      req.body.emergency_name,
+      req.body.emergency_relation,
+      req.body.emergency_phone,
+      req.body.height_ft,
+      req.body.height_in,
+      req.body.birthday,
+      req.body.phone,
+      req.body.hide_phone,
+      req.body.about,
+      req.body.fun_fact,
+      req.body.employer,
+      req.body.occupation,
+      req.body.website_url,
+      req.body.x_url,
+      req.body.instagram_url,
+      req.body.facebook_url,
+      req.body.linkedin_url,
+      req.body.tiktok_url,
+      req.body.sheet_music,
+      req.body.accessibility,
+      photoUrl || null, // Include photo URL if available
+      req.body.shirt_size_id,
+      req.user.id,
+    ];
+    const sectionUpdateQuery = await connection.query(
+      profileSqlQuery,
+      profileSqlValues
+    );
+
+    await connection.query("COMMIT;");
+      res.sendStatus(201);
+    } catch (err) {
+      console.log("PUT /api/profile/edit failed:", err);
+      await connection.query("ROLLBACK;");
+      res.sendStatus(500);
+    } finally {
+      await connection.release();
+    }
+  })
+
 module.exports = router;

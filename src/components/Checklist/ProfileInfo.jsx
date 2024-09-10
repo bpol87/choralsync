@@ -1,7 +1,7 @@
 import { InformationCircleIcon } from "@heroicons/react/20/solid";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { useHistory, useNavigate } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
 
 function ProfileInfo() {
