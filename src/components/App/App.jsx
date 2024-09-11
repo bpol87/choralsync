@@ -28,8 +28,12 @@ import SocialInfo from '../Checklist/SocialInfo';
 import ReviewProfile from '../Checklist/Review';
 import MemberList from '../Members/MembersList';
 import MemberProfile from '../Members/MemberProfile';
-
+import EditProfile from '../EditProfile/EditProfile';
+import MusicLibrary from '../Music/MusicLibrary';
+import ConcertTracks from '../Music/Tracks';
 import './App.css';
+
+
 
 function App() {
   const dispatch = useDispatch();
@@ -39,17 +43,20 @@ function App() {
   useEffect(() => {
     dispatch({ type: 'FETCH_USER' });
     dispatch({ type: 'FETCH_USER_PROFILE'});
+    dispatch({ type: "FETCH_CONCERTS" })
   }, [dispatch]);
 
 useEffect(() => {
-    dispatch({type: 'FETCH_USER_PROFILE'})
+    dispatch({type: 'FETCH_USER_PROFILE'});
     dispatch({ type: "FETCH_MEMBER_CARDS" });
+    dispatch({ type: "FETCH_CONCERTS" });
 }, [])
 
   return (
     <Router>
-      <div className='bg-gray-300'>
+      <div className='bg-gray-300 min-h-screen flex flex-col'>
         <Nav />
+        <div className='flex flex-col flex-grow'>
         <Switch>
           {/* Visiting localhost:5173 will redirect to localhost:5173/home */}
           <Redirect exact from="/" to="/home" />
@@ -141,7 +148,29 @@ useEffect(() => {
             path="/members/:id"
           >
             <MemberProfile />
+            </ProtectedRoute>
+            <ProtectedRoute
+            // logged in shows InfoPage else shows LoginPage
+            exact
+            path="/edit-profile"
+          >
+            <EditProfile />
           </ProtectedRoute>
+          <ProtectedRoute
+            // logged in shows InfoPage else shows LoginPage
+            exact
+            path="/music-library"
+          >
+            <MusicLibrary />
+          </ProtectedRoute>
+          <ProtectedRoute
+            // logged in shows InfoPage else shows LoginPage
+            exact
+            path='/music-library/:concertId'
+          >
+            <ConcertTracks />
+          </ProtectedRoute>
+
           <Route
             exact
             path="/login"
@@ -189,6 +218,7 @@ useEffect(() => {
             <h1>404</h1>
           </Route>
         </Switch>
+        </div>
         <Footer />
       </div>
     </Router>

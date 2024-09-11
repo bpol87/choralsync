@@ -23,7 +23,6 @@ function ReviewProfile() {
     } else {
       return "";
     }
-    return;
   };
 
   const submitProfile = () => {

@@ -1,22 +1,18 @@
 import { combineReducers } from "redux";
 
-const membersCards = (state = {}, action) => {
+const concertList = (state = {}, action) => {
   switch (action.type) {
-    case "SET_MEMBER_CARDS":
+    case "SET_CONCERTS":
       return action.payload;
-    case "UNSET_MEMBER_CARDS":
-      return {};
     default:
       return state;
   }
 };
 
-const memberProfile = (state = {}, action) => {
+const activeConcert = (state = {}, action) => {
   switch (action.type) {
-    case "SET_MEMBER":
+    case "SET_ACTIVE_CONCERT":
       return action.payload;
-    case "UNSET_MEMBER":
-      return {};
     default:
       return state;
   }
@@ -24,8 +20,7 @@ const memberProfile = (state = {}, action) => {
 
 // user will be on the redux state at:
 // state.user
-
 export default combineReducers({
-  membersCards,
-  memberProfile,
+  concertList,
+  activeConcert,
 });

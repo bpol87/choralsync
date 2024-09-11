@@ -18,8 +18,7 @@ function MemberList() {
   }, []);
   
   const history = useHistory();
-  const users = useSelector((store) => store.memberCards);
-console.log(users)
+  const users = useSelector((store) => store.members.membersCards);
   const [searchText, setSearchText] = useState('')
  
     const filteredUsers = users && users.filter(
@@ -42,7 +41,7 @@ console.log(users)
             <button className="bg-white w-32 rounded-r-md p-2 border flex flex-row items-center text-center">Sort<AdjustmentsHorizontalIcon className="size-6" /></button>
         </div> */}
       <div className="flex items-center">
-        <div className="flex flex-wrap justify-center">
+        <div className="flex flex-wrap justify-center">›
           {filteredUsers &&
             filteredUsers.map((user) => {
               return <MemberItem key={user.id} user={user} />;
