@@ -60,7 +60,7 @@ function ConcertTracks() {
 
   return (
     <div className="flex flex-col w-full items-center">
-      <h2 className="py-4 text-3xl font-bold">Concert: {activeConcert.year} {activeConcert.period} - {activeConcert.name}</h2>
+      {activeConcert && <h2 className="py-4 text-3xl font-bold">Concert: {activeConcert.year} {activeConcert.period} - {activeConcert.name}</h2>}
       <div className="w-8/12 bg-white rounded-lg shadow-lg p-4">
         <table className="w-full">
           <thead className="bg-teal-700">
