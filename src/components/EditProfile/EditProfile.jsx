@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useDropzone } from "react-dropzone";
 
 function EditProfile() {
+  const history = useHistory();
   const memberToEdit = useSelector((store) => store.members.memberProfile);
   const user = useSelector((store) => store.user);
   const dispatch = useDispatch();
@@ -17,59 +19,47 @@ function EditProfile() {
   const [lastName, setLastName] = useState(memberToEdit.last_name || "");
   const [nickname, setNickname] = useState(memberToEdit.nickname || "");
   const [pronouns, setPronouns] = useState(memberToEdit.pronouns || "");
-  const [hidePronouns, setHidePronouns] = useState(
-    memberToEdit.hide_pronouns || false
-  );
+  const [hidePronouns, setHidePronouns] = useState(memberToEdit.hide_pronouns || false);
   const [birthday, setBirthday] = useState("");
   const [formalName, setFormalName] = useState(memberToEdit.formal_name || "");
   const [shirtSize, setShirtSize] = useState(memberToEdit.shirt_size_id || "");
   const [heightFt, setHeightFt] = useState(memberToEdit.height_ft || "");
   const [heightIn, setHeightIn] = useState(memberToEdit.height_in || "");
   const [sheetMusic, setSheetMusic] = useState(memberToEdit.sheet_music || "");
-  const [accessibility, setAccessibility] = useState(
-    memberToEdit.accessibility || ""
-  );
+  const [accessibility, setAccessibility] = useState(memberToEdit.accessibility || "");
   const [email, setEmail] = useState(memberToEdit.email || user.username);
   const [hideEmail, setHideEmail] = useState(false);
   const [phone, setPhone] = useState(memberToEdit.phone || "");
   const [hidePhone, setHidePhone] = useState(false);
-  const [address_1, setAddress_1] = useState(
-    memberToEdit.street_address_1 || ""
-  );
-  const [address_2, setAddress_2] = useState(
-    memberToEdit.street_address_2 || ""
-  );
+  const [address_1, setAddress_1] = useState(memberToEdit.street_address_1 || "");
+  const [address_2, setAddress_2] = useState(memberToEdit.street_address_2 || "");
   const [city, setCity] = useState(memberToEdit.city || "");
   const [state, setState] = useState(memberToEdit.state || "MN");
   const [zipCode, setZipCode] = useState(memberToEdit.zip || "");
-  const [hideAddress, setHideAddress] = useState(
-    memberToEdit.hide_address || false
-  );
-  const [emergency_name, setEmergencyName] = useState(
-    memberToEdit.emergency_name || ""
-  );
-  const [emergency_relation, setEmergencyRelation] = useState(
-    memberToEdit.emergency_relation || ""
-  );
-  const [emergency_phone, setEmergencyPhone] = useState(
-    memberToEdit.emergency_phone || ""
-  );
+  const [hideAddress, setHideAddress] = useState(memberToEdit.hide_address || false);
+  const [emergency_name, setEmergencyName] = useState(memberToEdit.emergency_name || "");
+  const [emergency_relation, setEmergencyRelation] = useState(memberToEdit.emergency_relation || "");
+  const [emergency_phone, setEmergencyPhone] = useState(memberToEdit.emergency_phone || "");
   const [about, setAbout] = useState(memberToEdit.about || "");
   const [fun_fact, setFunFact] = useState(memberToEdit.fun_fact || "");
   const [employer, setEmployer] = useState(memberToEdit.employer || "");
   const [occupation, setOccupation] = useState(memberToEdit.occupation || "");
   const [website_url, setWebsiteUrl] = useState(memberToEdit.website_url || "");
   const [x_url, setXUrl] = useState(memberToEdit.x_url || "");
-  const [facebook_url, setFacebookUrl] = useState(
-    memberToEdit.facebook_url || ""
-  );
-  const [linkedin_url, setLinkedinUrl] = useState(
-    memberToEdit.linkedin_url || ""
-  );
+  const [facebook_url, setFacebookUrl] = useState(memberToEdit.facebook_url || "");
+  const [linkedin_url, setLinkedinUrl] = useState(memberToEdit.linkedin_url || "");
   const [tiktok_url, setTiktokUrl] = useState(memberToEdit.tiktok_url || "");
-  const [instagram_url, setInstagramUrl] = useState(
-    memberToEdit.instagram_url || ""
-  );
+  const [instagram_url, setInstagramUrl] = useState(memberToEdit.instagram_url || "");
+  const [profilePhoto, setProfilePhoto] = useState(null);
+  const [uploadError, setUploadError] = useState(null);
+
+  // Dropzone configuration to handle file selection
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: "image/*",
+    onDrop: (acceptedFiles) => {
+      setProfilePhoto(acceptedFiles[0]); // Save the selected file in state
+    },
+  });
 
   const handlePronounChange = (e) => {
     setHidePronouns(!hidePronouns);
@@ -90,6 +80,10 @@ function EditProfile() {
     setHideAddress(!hideAddress);
   };
 
+  const handleDrop = (acceptedFiles) => {
+    setFile(acceptedFiles[0]);
+  };
+
   const handleDateChange = (timestamp) => {
     const birthdayFormat = new Intl.DateTimeFormat("en-CA").format(timestamp);
     return birthdayFormat;
@@ -107,55 +101,78 @@ function EditProfile() {
     }
   };
 
-  const submitEditsToMember = (event) => {
+  const handleGoBack = () => {
+    history.push(`/members/${user.id}`);
+  }
 
-    let memberToUpdate = {
-      email: email,
-      hide_email: hideEmail,
-      first_name: firstName,
-      last_name: lastName,
-      middle_initial: middleInitial,
-      hide_middle_initial: hideMiddle,
-      pronouns: pronouns,
-      hide_pronouns: hidePronouns,
-      nickname: nickname,
-      formal_name: formalName,
-      street_address_1: address_1,
-      street_address_2: address_2,
-      city: city,
-      state: state,
-      zip: zipCode,
-      hide_address: hideAddress,
-      emergency_name: emergency_name,
-      emergency_relation: emergency_relation,
-      emergency_phone: emergency_phone,
-      height_ft: heightFt,
-      height_in: heightIn,
-      birthday: birthday,
-      phone: phone,
-      hide_phone: hidePhone,
-      about: about,
-      fun_fact: fun_fact,
-      employer: employer,
-      occupation: occupation,
-      website_url: website_url,
-      x_url: x_url,
-      instagram_url: instagram_url,
-      facebook_url: facebook_url,
-      linkedin_url: linkedin_url,
-      tiktok_url: tiktok_url,
-      sheet_music: sheetMusic,
-      accessibility: accessibility,
-      userId: user.id
-    };
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-    dispatch({type: 'SUBMIT_EDITS_TO_MEMBER', payload: memberToUpdate})
+    // Create a FormData object to handle text inputs and file together
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("hideEmail", hideEmail);
+    formData.append("firstName", firstName);
+    formData.append("lastName", lastName);
+    formData.append("middleInitial", middleInitial);
+    formData.append("hideMiddle", hideMiddle);
+    formData.append("pronouns", pronouns);
+    formData.append("hidePronouns", hidePronouns);
+    formData.append("nickname", nickname);
+    formData.append("formalName", formalName);
+    formData.append("street_address_1", address_1);
+    formData.append("street_address_2", address_2);
+    formData.append("city", city);
+    formData.append("state", state);
+    formData.append("zip", zipCode);
+    formData.append('hide_address', hideAddress);
+    formData.append("emergency_name", emergency_name);
+    formData.append("emergency_relation", emergency_relation);
+    formData.append("emergency_phone", emergency_phone);
+    formData.append("heightFt", heightFt);
+    formData.append("heightIn", heightIn);
+    formData.append("birthday", birthday);
+    formData.append("phone", phone);
+    formData.append("hidePhone", hidePhone);
+    formData.append("about", about);
+    formData.append("fun_fact", fun_fact);
+    formData.append("employer", employer);
+    formData.append("occupation", occupation);
+    formData.append("website_url", website_url);
+    formData.append("x_url", x_url);
+    formData.append("instagram_url", instagram_url);
+    formData.append("facebook_url", facebook_url);
+    formData.append("linkedin_url", linkedin_url);
+    formData.append("tiktok_url", tiktok_url);
+    formData.append("sheetMusic", sheetMusic);
+    formData.append("accessibility", accessibility);
+    formData.append("shirt_size_id", shirtSize);
+    
+    // Append the profile photo if one is selected
+    if (profilePhoto) {
+      formData.append("profilePhoto", profilePhoto);
+    }
+
+    dispatch({
+      type: "SUBMIT_EDITS_TO_MEMBER",
+      payload: formData,
+    });
   };
 
   return (
     <div className="flex flex-col items-center p-6">
       <div className="bg-white flex flex-col w-fit p-6 rounded-lg shadow-lg">
         <h2 className="text-3xl font-bold">Edit Profile</h2>
+        <div className="flex flex-row py-4 text-xs">
+          <div className="pr-4">
+          <p className="font-bold">Status:</p>
+          <p clas>{memberToEdit.status}</p>
+          </div>
+          <div>
+          <p className="font-bold">Section:</p>
+          <p>{memberToEdit.voice_section} &#40;{memberToEdit.part}&#41;</p>
+          </div>          
+        </div>
         <form className="text-xs">
           <p className="font-bold text-lg pt-2">Personal Information:</p>
           <div className="flex flex-col items-center">
@@ -597,8 +614,24 @@ function EditProfile() {
                 onChange={(e) => setXUrl(e.target.value)}
               ></input>
             </div>
+            <div className="flex flex-col py-2 w-full">
+            <label>Update Profile Photo:</label>
+            <div
+              {...getRootProps()}
+              className="border-dashed border-2 border-gray-300 p-4 rounded-md"
+            >
+              <input {...getInputProps()} />
+              {profilePhoto ? (
+                <p className="text-center">File selected: {profilePhoto.name}</p>
+              ) : (
+                <p className="text-center">Drag 'n' drop a file here, or click to select one</p>
+              )}
+            </div>
+            {uploadError && <p style={{ color: "red" }}>{uploadError}</p>}
+          </div>
             <div className="flex flex-row p-4 w-full justify-end">
-              <button className="mx-2 px-6 py-1 border border-teal-700 text-teal-700 rounded-full">
+              <button className="mx-2 px-6 py-1 border border-teal-700 text-teal-700 rounded-full"
+             onClick={handleGoBack}>
                 Cancel
               </button>
               <button className="mx-2 px-6 py-1 bg-teal-700 rounded-full text-white"
