@@ -12,11 +12,10 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 // Upload route
-router.post("/upload", upload.array("files"), async (req, res) => {
+router.post("/upload-pdf", upload.array("files"), async (req, res) => {
   const { concertId } = req.body;
   const names = req.body.names;
   const pdfNames = req.files.map(file => file.originalname);
-  const categories = req.body.categories;
 
   try {
     const uploadPromises = req.files.map(async (file, index) => {
@@ -33,19 +32,18 @@ router.post("/upload", upload.array("files"), async (req, res) => {
       // Upload to S3
       await s3.send(new PutObjectCommand(s3Params));
 
-      const s3Url = `https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com/${fileKey}`;
+      const s3Url = `https://${process.env.AWS_SHEET_MUSIC_BUCKET_NAME}.s3.amazonaws.com/${fileKey}`;
 
-      // Insert the file metadata into the "songs" table
       const insertSongQuery = `
         INSERT INTO "songs" ("name", "pdf_name", "pdf_url")
         VALUES ($1, $2, $3)
         RETURNING id
       `;
-      const insertSongValues = [names[index], pdfNames[index], s3Url];
+      const name = names[index];
+      const insertSongValues = [name, pdfNames[index], s3Url];
       const songResult = await pool.query(insertSongQuery, insertSongValues);
       const songId = songResult.rows[0].id;
 
-      // Now insert into the "concert_songs" table to link concert and song
       const insertConcertSongQuery = `
         INSERT INTO "concert_songs" ("concert_id", "song_id")
         VALUES ($1, $2)
@@ -56,12 +54,93 @@ router.post("/upload", upload.array("files"), async (req, res) => {
 
     await Promise.all(uploadPromises);
 
-    res.sendStatus(201);
+    // Send the response with the concert ID since all files belong to the same concert
+    res.status(201).json({ concertId });
   } catch (error) {
     console.error("Error uploading files:", error);
     res.sendStatus(500);
   }
 });
+
+router.post("/upload-tracks", upload.array("files"), async (req, res) => {
+  const { concertId } = req.body;
+  const names = req.body.names;
+  const sectionIds = req.body.sectionIds;
+  const partIds = req.body.partIds;
+  const songIds = req.body.songIds;
+
+  try {
+    const uploadPromises = req.files.map(async (file, index) => {
+      const fileKey = `${uuidv4()}-${file.originalname}`;
+      const s3Params = {
+        Bucket: process.env.AWS_TRACKS_BUCKET_NAME,
+        Key: fileKey,
+        Body: file.buffer,
+        ContentType: file.mimetype,
+      };
+
+      await s3.send(new PutObjectCommand(s3Params));
+
+      const s3Url = `https://${process.env.AWS_TRACKS_BUCKET_NAME}.s3.amazonaws.com/${fileKey}`;
+
+      // Insert the file metadata into the "tracks" table
+      const insertTrackQuery = `
+        INSERT INTO "tracks" ("track_name", "track_url", "track_section_id", "track_part_id", "song_id")
+        VALUES ($1, $2, $3, $4, $5)
+      `;
+      const name = names[index];
+      const insertTrackValues = [name, s3Url, sectionIds[index], partIds[index], songIds[index]];
+      await pool.query(insertTrackQuery, insertTrackValues);
+    });
+
+    await Promise.all(uploadPromises);
+
+    res.sendStatus(201);
+  } catch (error) {
+    console.error("Error uploading tracks:", error);
+    res.sendStatus(500);
+  }
+});
+
+router.get('/documents/:id', (req, res) => {
+  
+  const sqlQuery = `
+  SELECT "songs".id AS "song_id", "songs"."name", "songs"."pdf_name", "songs"."pdf_url"  FROM "concert_songs"
+    JOIN "songs" ON "concert_songs".song_id = "songs".id
+    WHERE "concert_id" = $1;
+  `
+
+  const sqlValue = [req.params.id]
+
+  pool.query(sqlQuery, sqlValue)
+  .then((response) => {
+    res.send(response.rows)
+  })
+  .catch((dbErr) => {
+    console.log('Server Error fetching PDFs', dbErr)
+    res.sendStatus(500)
+  })
+})
+
+router.get('/tracks/:id', (req, res) => {
+  
+  const sqlQuery = `
+  SELECT "songs".id AS "song_id", "songs"."name", "songs"."pdf_name", "songs"."pdf_url"  FROM "concert_songs"
+    JOIN "songs" ON "concert_songs".song_id = "songs".id
+    WHERE "concert_id" = $1;
+  `
+
+  const sqlValue = [req.params.id]
+
+  pool.query(sqlQuery, sqlValue)
+  .then((response) => {
+    res.send(response.rows)
+  })
+  .catch((dbErr) => {
+    console.log('Server Error fetching PDFs', dbErr)
+    res.sendStatus(500)
+  })
+})
 
 router.get('/active/:id', (req, res) => {
     const sqlQuery = `

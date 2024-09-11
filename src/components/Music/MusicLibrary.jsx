@@ -3,13 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import {
   PlusCircleIcon,
-  MinusCircleIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
 
 function MusicLibrary() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [remove, setRemove] = useState(false);
   const [newConcert, setNewConcert] = useState({
     name: "",
     period: "",
@@ -23,7 +21,8 @@ function MusicLibrary() {
     dispatch({ type: "FETCH_CONCERTS" });
   }, [dispatch]);
 
-  const concerts = useSelector((store) => store.concerts.concertList);
+  const concerts = useSelector((store) => store.concerts.concertList) || [];
+  console.log(concerts)
   const user = useSelector((store) => store.user);
 
   const handleClick = (concertId) => {
@@ -62,31 +61,31 @@ function MusicLibrary() {
           </div>
         )}
         <ul>
-          {concerts.map((concert) => {
-            return (
+          {concerts.length > 0 ? (
+            concerts.map((concert) => (
               <li
                 key={concert.id}
                 className="flex flex-row py-2"
               >
                 <div
-                className="underline underline-offset-1 text-teal-700"
-                onClick={() => handleClick(concert.id)}>
+                  className="underline underline-offset-1 text-teal-700"
+                  onClick={() => handleClick(concert.id)}
+                >
                   {concert.year} {concert.period} - {concert.name}
                 </div>
-                {user.isAdmin ? (
+                {user.isAdmin && (
                   <button
                     className="mx-4 px-4 rounded-lg bg-red-700 text-white shadow-md"
                     onClick={() => removeConcert(concert.id)}
                   >
-                    {" "}
                     Delete
                   </button>
-                ) : (
-                  ""
                 )}
               </li>
-            );
-          })}
+            ))
+          ) : (
+            <li className="py-2">No concerts available</li>
+          )}
         </ul>
       </div>
 
@@ -117,18 +116,17 @@ function MusicLibrary() {
                 <div className="mb-4">
                   <label className="block text-gray-700">Period</label>
                   <select
-                    type="text"
                     name="period"
                     value={newConcert.period}
                     onChange={handleInputChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                     required
                   >
-                    <option>Select a Period:</option>
-                    <option>Holiday</option>
-                    <option>Pride</option>
-                    <option>Spring</option>
-                    <option>Ongoing</option>
+                    <option value="">Select a Period:</option>
+                    <option value="Holiday">Holiday</option>
+                    <option value="Pride">Pride</option>
+                    <option value="Spring">Spring</option>
+                    <option value="Ongoing">Ongoing</option>
                   </select>
                 </div>
                 <div className="mb-4">

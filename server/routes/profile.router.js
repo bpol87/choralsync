@@ -287,6 +287,7 @@ router.put("/social-info", async (req, res) => {
 
 // Get user profile
 router.get("/user", (req, res) => {
+  console.log(req.user)
   const sqlQuery = `
   SELECT *, "shirt_size"."size" 
     FROM "profile"
