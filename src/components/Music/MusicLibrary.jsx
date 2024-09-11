@@ -23,7 +23,7 @@ function MusicLibrary() {
     dispatch({ type: "FETCH_CONCERTS" });
   }, [dispatch]);
 
-  const concerts = useSelector((store) => store.concerts);
+  const concerts = useSelector((store) => store.concerts.concertList);
   const user = useSelector((store) => store.user);
 
   const handleClick = (concertId) => {
