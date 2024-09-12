@@ -69,7 +69,7 @@ function ConcertTracks() {
   };
 
   const handleDeletePdf = (pdfId, concertId) => {
-
+    dispatch({type: 'DELETE_PDF', payload: { pdfId, concertId }})
   }
 
   // Track handlers
@@ -187,7 +187,8 @@ const handleDeleteTrack = (trackId) => {
                         <ArrowDownTrayIcon className="size-4 mr-2" /> Download
                         PDF
                       </button>
-                      <button className="flex flex-row items-center text-nowrap px-4 py-2 ml-4 bg-red-700 rounded-full text-white">
+                      <button className="flex flex-row items-center text-nowrap px-4 py-2 ml-4 bg-red-700 rounded-full text-white"
+                      onClick={() => handleDeletePdf(pdf.song_id, concertId)}>
                         <TrashIcon className="size-4 mr-2 " /> Delete
                       </button>
                     </td>

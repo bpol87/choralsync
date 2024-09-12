@@ -49,7 +49,7 @@ function* deletePdf(action) {
     const { pdfId, concertId } = action.payload;
   
     try {
-      yield call(axios.delete, `/api/tracks/delete-pdf/${pdfId}`);
+      const response = yield axios.delete(`/api/concerts/delete-pdf/${pdfId}`);
       
       yield put({ type: 'FETCH_PDFS', payload: concertId });
     } catch (error) {

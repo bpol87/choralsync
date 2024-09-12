@@ -60,8 +60,9 @@ router.post("/upload-pdf", upload.array("files"), async (req, res) => {
   }
 });
 
-router.delete("/delete-pdf/:pdfId", async (req, res) => {
-  const pdfId = req.params.pdfId;
+router.delete("/delete-pdf/:id", async (req, res) => {
+  const pdfId = req.params.id;
+  console.log('pdfId is:', pdfId);
 
   try {
     const getPdfQuery = `
@@ -84,6 +85,12 @@ router.delete("/delete-pdf/:pdfId", async (req, res) => {
     };
     await s3.send(new DeleteObjectCommand(s3Params));
 
+    const deleteConcertSongsQuery = `
+      DELETE FROM "concert_songs"
+      WHERE "song_id" = $1;
+    `;
+    await pool.query(deleteConcertSongsQuery, [pdfId]);
+
     const deletePdfQuery = `
       DELETE FROM "songs"
       WHERE "id" = $1;
@@ -96,6 +103,7 @@ router.delete("/delete-pdf/:pdfId", async (req, res) => {
     res.sendStatus(500);
   }
 });
+
 
 router.post("/upload-tracks", upload.array("files"), async (req, res) => {
   const { concertId } = req.body;
