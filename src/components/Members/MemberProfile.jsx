@@ -143,7 +143,7 @@ function MemberProfile() {
 const showEdit = () => {
     if (memberProfile.member_id === user.id) {
         return (
-            <div className="flex flex-row" onClick={() => history.push('/edit-profile')}>
+            <div className="flex flex-row hover:cursor-pointer" onClick={() => history.push('/edit-profile')}>
                 <PencilSquareIcon className="size-4" />
                 <p>Edit Profile</p>
             </div>

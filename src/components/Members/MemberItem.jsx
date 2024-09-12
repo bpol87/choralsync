@@ -34,7 +34,7 @@ function MemberItem(props) {
   }
 
   return (
-    <div className="border border-teal-700 rounded-md m-4 w-60 flex flex-col shadow-lg" onClick={()=>handleCardClick(props.user.id)}>
+    <div className="border border-teal-700 rounded-md m-4 w-60 flex flex-col shadow-lg hover:cursor-pointer" onClick={()=>handleCardClick(props.user.id)}>
       {handlePhoto()}
       <div className="p-4">
         <p className="font-bold py-2 text-lg text-start">

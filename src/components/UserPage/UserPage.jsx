@@ -17,7 +17,7 @@ function UserPage() {
 }
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center mt-8">
       <button className="shadow-lg rounded-full w-52 py-2 px-6 m-2 text-xs text-white bg-teal-600" onClick={() => history.push('/music-library')}>Music Library</button>
       <button className="shadow-lg rounded-full w-52 py-2 px-6 m-2 text-xs text-white bg-teal-600" onClick={() => history.push('/calendar')} >Calendar</button>
       <button className="shadow-lg rounded-full w-52 py-2 px-6 m-2 text-xs text-white bg-teal-600" onClick={() => history.push('/members')}>Member Directory</button>
