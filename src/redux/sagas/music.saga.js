@@ -59,25 +59,37 @@ function* fetchPDFs(action) {
 // Tracks
 function* uploadTracks(action) {
     try {
-        yield axios.post('/api/concerts/upload-tracks', action.payload, {
+        const formData = action.payload;
+        yield axios.post('/api/concerts/upload-tracks', formData, {
             headers: { "Content-Type": "multipart/form-data" },
         });
-        yield put({ type: "FETCH_TRACKS", payload: action.payload.get("concertId") });
+        yield put({ type: "FETCH_TRACKS", payload: formData.get("concertId") });
     } catch (error) {
         console.error('Error uploading tracks:', error);
     }
 }
 
-function* fetchTracks (action) {
+function* fetchTracks(action) {
     try {
-        const concertId = action.payload;
-        const response = yield axios.get(`/api/concerts/tracks/${concertId}`);
-        const trackList = response.data;
-        yield put({ type: 'SET_PDFS', payload: pdfList});
+        console.log(action.payload)
+        const concertId = action.payload.concertId;
+        const sectionId = action.payload.sectionId;
+
+        // Make a GET request to fetch both section-specific and balanced tracks
+        const response = yield axios.get(`/api/concerts/tracks/${concertId}?sectionId=${sectionId}`);
+        
+        const { sectionTracks, balancedTracks } = response.data;
+
+        // Dispatch section-specific tracks to the section reducer
+        yield put({ type: 'SET_SECTION_TRACKS', payload: sectionTracks });
+
+        // Dispatch balanced tracks to the balanced tracks reducer
+        yield put({ type: 'SET_BALANCED_TRACKS', payload: balancedTracks });
     } catch (err) {
-        console.log("Error fetching PDFs:", err);
+        console.log("Error fetching tracks:", err);
     }
 }
+
 
 // Active Concert
 function* fetchActiveConcert(action) {

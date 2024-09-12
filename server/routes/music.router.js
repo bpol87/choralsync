@@ -66,7 +66,7 @@ router.post("/upload-tracks", upload.array("files"), async (req, res) => {
   const { concertId } = req.body;
   const names = req.body.names;
   const sectionIds = req.body.sectionIds;
-  const partIds = req.body.partIds;
+  const partIds = req.body.partIds;  // May be null or not provided
   const songIds = req.body.songIds;
 
   try {
@@ -83,13 +83,19 @@ router.post("/upload-tracks", upload.array("files"), async (req, res) => {
 
       const s3Url = `https://${process.env.AWS_TRACKS_BUCKET_NAME}.s3.amazonaws.com/${fileKey}`;
 
-      // Insert the file metadata into the "tracks" table
+      // Ensure conversion and handling of values
+      const sectionId = sectionIds[index] ? parseInt(sectionIds[index], 10) : null;
+      const songId = songIds[index] ? parseInt(songIds[index], 10) : null;
+      const partId = partIds[index] ? parseInt(partIds[index], 10) : null;
+
+      console.log('sectionId:', sectionId, 'partId:', partId, 'songId:', songId);
+
       const insertTrackQuery = `
         INSERT INTO "tracks" ("track_name", "track_url", "track_section_id", "track_part_id", "song_id")
         VALUES ($1, $2, $3, $4, $5)
       `;
       const name = names[index];
-      const insertTrackValues = [name, s3Url, sectionIds[index], partIds[index], songIds[index]];
+      const insertTrackValues = [name, s3Url, sectionId, partId, songId];
       await pool.query(insertTrackQuery, insertTrackValues);
     });
 
@@ -102,12 +108,52 @@ router.post("/upload-tracks", upload.array("files"), async (req, res) => {
   }
 });
 
+router.get("/tracks/:concertId", async (req, res) => {
+  const concertId = req.params.concertId;
+  const sectionId = req.query.sectionId;
+  console.log('concertId:', concertId, 'sectionId:', sectionId)
+
+  try {
+    const sectionTracksQuery = `
+      SELECT t.*
+        FROM "tracks" t
+        JOIN "concert_songs" cs ON t."song_id" = cs."song_id"
+        WHERE cs."concert_id" = $1
+        AND t."track_section_id" = $2;
+    `;
+    const sectionTracksValues = [concertId, sectionId];
+    const sectionTracksResult = await pool.query(sectionTracksQuery, sectionTracksValues);
+
+    const balancedTracksQuery = `
+      SELECT t.*
+        FROM "tracks" t
+        JOIN "concert_songs" cs ON t."song_id" = cs."song_id"
+        WHERE cs."concert_id" = $1
+        AND t."track_section_id" = 5;
+    `;
+    const balancedTracksValues = [concertId];
+    const balancedTracksResult = await pool.query(balancedTracksQuery, balancedTracksValues);
+
+    res.json({
+      sectionTracks: sectionTracksResult.rows,
+      balancedTracks: balancedTracksResult.rows,
+    });
+  } catch (error) {
+    console.error("Error fetching tracks:", error);
+    res.sendStatus(500);
+  }
+});
+
+
+
+
 router.get('/documents/:id', (req, res) => {
   
   const sqlQuery = `
   SELECT "songs".id AS "song_id", "songs"."name", "songs"."pdf_name", "songs"."pdf_url"  FROM "concert_songs"
     JOIN "songs" ON "concert_songs".song_id = "songs".id
-    WHERE "concert_id" = $1;
+    WHERE "concert_id" = $1
+    ORDER BY "songs"."name";
   `
 
   const sqlValue = [req.params.id]

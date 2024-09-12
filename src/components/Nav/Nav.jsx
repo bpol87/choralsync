@@ -14,8 +14,8 @@ function Nav() {
       </div>
       <div>
         {/* If a user is logged in and checklist is complete, show these links */}
-        {user.id && user.isChecklistComplete && (
-          <div>
+        {/* {user.id && user.isChecklistComplete && ( */}
+          {<div>
             <Link className="hover:bg-teal-800 hover:text-white" to="/user">
               Home
             </Link>
@@ -26,7 +26,7 @@ function Nav() {
 
             <LogOutButton className="hover:bg-teal-800 hover:text-white" />
           </div>
-        )}
+        }
       </div>
     </div>
   );

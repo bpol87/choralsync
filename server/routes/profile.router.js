@@ -289,9 +289,10 @@ router.put("/social-info", async (req, res) => {
 router.get("/user", (req, res) => {
   console.log(req.user)
   const sqlQuery = `
-  SELECT *, "shirt_size"."size" 
+  SELECT *, "shirt_size"."size", "section"."voice_section" AS "choral_section"
     FROM "profile"
     JOIN "shirt_size" ON "profile"."shirt_size_id" = "shirt_size"."id"
+    JOIN "section" ON profile.section_id = "section".id
     WHERE "user_id" = $1;
   `;
   const sqlValue = [req.user.id];
