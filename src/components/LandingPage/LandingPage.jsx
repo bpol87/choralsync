@@ -5,7 +5,6 @@ import { useHistory } from "react-router-dom";
 import RegisterForm from "../RegisterForm/RegisterForm";
 
 function LandingPage() {
-  const [heading, setHeading] = useState("Welcome");
   const history = useHistory();
 
   const onLogin = (event) => {
@@ -14,7 +13,6 @@ function LandingPage() {
 
   return (
     <div className="w-full">
-      <h2>{heading}</h2>
 
       <div className="flex flex-col items-center">
         <RegisterForm />

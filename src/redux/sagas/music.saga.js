@@ -45,6 +45,18 @@ function* uploadPdfs(action) {
     }
 }
 
+function* deletePdf(action) {
+    const { pdfId, concertId } = action.payload;
+  
+    try {
+      yield call(axios.delete, `/api/tracks/delete-pdf/${pdfId}`);
+      
+      yield put({ type: 'FETCH_PDFS', payload: concertId });
+    } catch (error) {
+      console.error('Error deleting PDF:', error);
+    }
+  }
+
 function* fetchPDFs(action) {
     try {
         const concertId = action.payload;
@@ -63,7 +75,11 @@ function* uploadTracks(action) {
         yield axios.post('/api/concerts/upload-tracks', formData, {
             headers: { "Content-Type": "multipart/form-data" },
         });
-        yield put({ type: "FETCH_TRACKS", payload: formData.get("concertId") });
+
+        const concertId = formData.get("concertId");
+        const sectionId = formData.get("userSectionId");
+
+        yield put({ type: "FETCH_TRACKS", payload: { concertId, sectionId } });
     } catch (error) {
         console.error('Error uploading tracks:', error);
     }
@@ -75,21 +91,29 @@ function* fetchTracks(action) {
         const concertId = action.payload.concertId;
         const sectionId = action.payload.sectionId;
 
-        // Make a GET request to fetch both section-specific and balanced tracks
         const response = yield axios.get(`/api/concerts/tracks/${concertId}?sectionId=${sectionId}`);
         
         const { sectionTracks, balancedTracks } = response.data;
 
-        // Dispatch section-specific tracks to the section reducer
         yield put({ type: 'SET_SECTION_TRACKS', payload: sectionTracks });
 
-        // Dispatch balanced tracks to the balanced tracks reducer
         yield put({ type: 'SET_BALANCED_TRACKS', payload: balancedTracks });
     } catch (err) {
         console.log("Error fetching tracks:", err);
     }
 }
 
+function* deleteTrack(action) {
+    try {
+        const trackId = action.payload.trackId;
+        const sectionId = action.payload.sectionId;
+        const concertId = action.payload.concertId;
+        const response = yield axios.delete(`/api/concerts/delete-track/${trackId}`)
+        yield put({type: 'FETCH_TRACKS', payload: { sectionId, concertId }})
+    } catch (error) {
+        console.error('Error deleting track:', error)
+    }
+}
 
 // Active Concert
 function* fetchActiveConcert(action) {
@@ -105,14 +129,22 @@ function* fetchActiveConcert(action) {
 
 // Saga Watcher
 function* musicSaga() {
+    //Concert Sagas
     yield takeLatest('FETCH_CONCERTS', fetchConcerts);
     yield takeLatest('ADD_CONCERT', addConcert);
     yield takeLatest('REMOVE_CONCERT', removeConcert);
+    yield takeLatest('FETCH_ACTIVE_CONCERT', fetchActiveConcert);
+
+    //PDF Sagas
     yield takeLatest('UPLOAD_PDFS', uploadPdfs);
+    yield takeLatest('DELETE_PDF', deletePdf);
     yield takeLatest('FETCH_PDFS', fetchPDFs);
+
+    //Tracks Sagas
     yield takeLatest('UPLOAD_TRACKS', uploadTracks);
     yield takeLatest('FETCH_TRACKS', fetchTracks);
-    yield takeLatest('FETCH_ACTIVE_CONCERT', fetchActiveConcert);
+    yield takeLatest('DELETE_REHEARSAL_TRACK', deleteTrack)
+    
 }
 
 export default musicSaga;

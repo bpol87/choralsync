@@ -1,7 +1,7 @@
 const express = require("express");
 const pool = require("../modules/pool");
 const multer = require("multer");
-const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const { S3Client, PutObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 const path = require("path");
 const router = express.Router();
 const { v4: uuidv4 } = require("uuid");
@@ -11,7 +11,7 @@ const s3 = new S3Client({ region: process.env.AWS_REGION });
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// Upload route
+// PDF routes
 router.post("/upload-pdf", upload.array("files"), async (req, res) => {
   const { concertId } = req.body;
   const names = req.body.names;
@@ -29,7 +29,6 @@ router.post("/upload-pdf", upload.array("files"), async (req, res) => {
         ContentType: file.mimetype,
       };
 
-      // Upload to S3
       await s3.send(new PutObjectCommand(s3Params));
 
       const s3Url = `https://${process.env.AWS_SHEET_MUSIC_BUCKET_NAME}.s3.amazonaws.com/${fileKey}`;
@@ -54,10 +53,46 @@ router.post("/upload-pdf", upload.array("files"), async (req, res) => {
 
     await Promise.all(uploadPromises);
 
-    // Send the response with the concert ID since all files belong to the same concert
     res.status(201).json({ concertId });
   } catch (error) {
     console.error("Error uploading files:", error);
+    res.sendStatus(500);
+  }
+});
+
+router.delete("/delete-pdf/:pdfId", async (req, res) => {
+  const pdfId = req.params.pdfId;
+
+  try {
+    const getPdfQuery = `
+      SELECT "pdf_url"
+      FROM "songs"
+      WHERE "id" = $1;
+    `;
+    const pdfResult = await pool.query(getPdfQuery, [pdfId]);
+
+    if (pdfResult.rows.length === 0) {
+      return res.status(404).json({ message: "PDF not found" });
+    }
+
+    const pdfUrl = pdfResult.rows[0].pdf_url;
+    const fileKey = pdfUrl.split('/').pop();
+
+    const s3Params = {
+      Bucket: process.env.AWS_SHEET_MUSIC_BUCKET_NAME,
+      Key: fileKey,
+    };
+    await s3.send(new DeleteObjectCommand(s3Params));
+
+    const deletePdfQuery = `
+      DELETE FROM "songs"
+      WHERE "id" = $1;
+    `;
+    await pool.query(deletePdfQuery, [pdfId]);
+
+    res.sendStatus(200);
+  } catch (error) {
+    console.error("Error deleting PDF:", error);
     res.sendStatus(500);
   }
 });
@@ -66,7 +101,7 @@ router.post("/upload-tracks", upload.array("files"), async (req, res) => {
   const { concertId } = req.body;
   const names = req.body.names;
   const sectionIds = req.body.sectionIds;
-  const partIds = req.body.partIds;  // May be null or not provided
+  const partIds = req.body.partIds;
   const songIds = req.body.songIds;
 
   try {
@@ -83,7 +118,6 @@ router.post("/upload-tracks", upload.array("files"), async (req, res) => {
 
       const s3Url = `https://${process.env.AWS_TRACKS_BUCKET_NAME}.s3.amazonaws.com/${fileKey}`;
 
-      // Ensure conversion and handling of values
       const sectionId = sectionIds[index] ? parseInt(sectionIds[index], 10) : null;
       const songId = songIds[index] ? parseInt(songIds[index], 10) : null;
       const partId = partIds[index] ? parseInt(partIds[index], 10) : null;
@@ -143,9 +177,6 @@ router.get("/tracks/:concertId", async (req, res) => {
     res.sendStatus(500);
   }
 });
-
-
-
 
 router.get('/documents/:id', (req, res) => {
   
@@ -258,6 +289,44 @@ router.delete('/delete/:id', (req, res) => {
         res.sendStatus(500)
     })
 })
+
+router.delete("/delete-track/:trackId", async (req, res) => {
+  const trackId = req.params.trackId;
+
+  try {
+    const getTrackQuery = `
+      SELECT "track_url"
+      FROM "tracks"
+      WHERE "id" = $1;
+    `;
+    const trackResult = await pool.query(getTrackQuery, [trackId]);
+
+    if (trackResult.rows.length === 0) {
+      return res.status(404).json({ message: "Track not found" });
+    }
+
+    const trackUrl = trackResult.rows[0].track_url;
+    const fileKey = trackUrl.split('/').pop();
+
+    const s3Params = {
+      Bucket: process.env.AWS_TRACKS_BUCKET_NAME,
+      Key: fileKey,
+    };
+
+    await s3.send(new DeleteObjectCommand(s3Params));
+
+    const deleteTrackQuery = `
+      DELETE FROM "tracks"
+      WHERE "id" = $1;
+    `;
+    await pool.query(deleteTrackQuery, [trackId]);
+
+    res.sendStatus(200);
+  } catch (error) {
+    console.error("Error deleting track:", error);
+    res.sendStatus(500);
+  }
+});
 
 
 

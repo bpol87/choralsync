@@ -5,6 +5,7 @@ import {
   XMarkIcon,
   ArrowDownTrayIcon,
   DocumentPlusIcon,
+  TrashIcon
 } from "@heroicons/react/24/outline";
 
 function ConcertTracks() {
@@ -67,6 +68,10 @@ function ConcertTracks() {
     setShowPDFModal(false);
   };
 
+  const handleDeletePdf = (pdfId, concertId) => {
+
+  }
+
   // Track handlers
   const handleTrackFileChange = (index, file) => {
     const newTracks = [...tracks];
@@ -126,14 +131,18 @@ function ConcertTracks() {
       const songId = track.songId ? parseInt(track.songId, 10) : null;
       formData.append("songIds", songId || "");
     });
-
+    formData.append("userSectionId", sectionId)
     formData.append("concertId", concertId);
     dispatch({ type: "UPLOAD_TRACKS", payload: formData });
     setShowTrackModal(false);
   };
 
+const handleDeleteTrack = (trackId) => {
+  dispatch({type: 'DELETE_REHEARSAL_TRACK', payload: { concertId, sectionId, trackId }})
+}
+
   return (
-    <div className="flex flex-col w-full items-center">
+    <div className="flex flex-col w-full items-center text-xs">
       {/* Concert Information */}
       {activeConcert && (
         <h2 className="py-4 text-3xl font-bold">
@@ -150,7 +159,7 @@ function ConcertTracks() {
                 <th className="text-start w-full text-white">PDFs</th>
                 <th className="flex flex-row w-full justify-end text-white">
                   <button className="flex flex-row mx-4">
-                    <ArrowDownTrayIcon className="size-6" />
+                    <ArrowDownTrayIcon className="size-4" />
                     Download All PDFs
                   </button>
                   {user.isAdmin && (
@@ -158,7 +167,7 @@ function ConcertTracks() {
                       className="flex flex-row ml-4"
                       onClick={() => setShowPDFModal(true)}
                     >
-                      <DocumentPlusIcon className="size-6" />
+                      <DocumentPlusIcon className="size-4" />
                       Add PDFs
                     </button>
                   )}
@@ -173,10 +182,13 @@ function ConcertTracks() {
                     className="flex flex-row items-center py-2 px-4"
                   >
                     <td className="text-start w-full">{pdf.name}</td>
-                    <td>
+                    <td className="flex flex-row">
                       <button className="flex flex-row items-center text-nowrap px-4 py-2 bg-teal-700 rounded-full text-white">
-                        <ArrowDownTrayIcon className="size-6 mx-2" /> Download
+                        <ArrowDownTrayIcon className="size-4 mr-2" /> Download
                         PDF
+                      </button>
+                      <button className="flex flex-row items-center text-nowrap px-4 py-2 ml-4 bg-red-700 rounded-full text-white">
+                        <TrashIcon className="size-4 mr-2 " /> Delete
                       </button>
                     </td>
                   </tr>
@@ -194,99 +206,127 @@ function ConcertTracks() {
 
         {/* Rehearsal Tracks Section */}
         <div>
-        <table className="w-full">
-        <thead className="bg-teal-700">
-          <tr className="flex flex-row items-center py-2 px-4">
-            <th className="text-start w-full text-white">
-              Rehearsal Tracks
-            </th>
-            <th className="flex flex-row w-full justify-end text-white">
-              <button className="flex flex-row mx-4 text-nowrap">
-                <ArrowDownTrayIcon className="size-6" />
-                Download All Tracks
-              </button>
-              {user.isAdmin && (
-                <button
-                  className="flex flex-row ml-4 text-nowrap"
-                  onClick={() => setShowTrackModal(true)}
-                >
-                  <DocumentPlusIcon className="size-6" />
-                  Add Rehearsal Track
-                </button>
+          <table className="w-full">
+            <thead className="bg-teal-700">
+              <tr className="flex flex-row items-center py-2 px-4">
+                <th className="text-start w-full text-white">
+                  Rehearsal Tracks
+                </th>
+                <th className="flex flex-row w-full justify-end text-white">
+                  <button className="flex flex-row mx-4 text-nowrap">
+                    <ArrowDownTrayIcon className="size-4" />
+                    Download All Tracks
+                  </button>
+                  {user.isAdmin && (
+                    <button
+                      className="flex flex-row ml-4 text-nowrap"
+                      onClick={() => setShowTrackModal(true)}
+                    >
+                      <DocumentPlusIcon className="size-4" />
+                      Add Rehearsal Track
+                    </button>
+                  )}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {balancedTracks.length > 0 && (
+                <tr>
+                  <td colSpan="2">
+                    <table className="w-full border-collapse">
+                      <thead>
+                        <tr className="flex flex-row items-center px-4 py-2 border-b border-teal-700">
+                          <th className="text-start w-full text-teal-700">
+                            Balanced Tracks
+                          </th>
+                          <th className="text-end text-white">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {balancedTracks.map((track) => (
+                          <tr
+                            key={track.id}
+                            className="flex flex-row items-center py-2 px-4"
+                          >
+                            <td className="text-start w-full">
+                              {track.track_name}
+                            </td>
+                            <td className="text-end flex flex-row">
+                              <button className="flex flex-row items-center text-nowrap px-4 py-2 bg-teal-700 rounded-full text-white">
+                                <ArrowDownTrayIcon className="size-4 mr-2" />{" "}
+                                Download
+                              </button>
+                              {user.isAdmin && (
+                                <button
+                                  className="flex flex-row items-center text-nowrap ml-4 px-4 py-2 bg-red-700 rounded-full text-white"
+                                  onClick={() => handleDeleteTrack(track.id)}
+                                >
+                                  <TrashIcon className="size-4 mr-2 " />
+                                  Delete
+                                </button>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
               )}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {balancedTracks.length > 0 && (
-            <tr>
-              <td colSpan="2">
-                <table className="w-full border-collapse">
-                  <thead>
-                    <tr className="flex flex-row items-center px-4 py-2 border-b border-teal-700">
-                      <th className="text-start w-full text-teal-700">Balanced Tracks</th>
-                      <th className="text-end text-white">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {balancedTracks.map((track) => (
-                      <tr
-                        key={track.id}
-                        className="flex flex-row items-center py-2 px-4"
-                      >
-                        <td className="text-start w-full">{track.track_name}</td>
-                        <td className="text-end">
-                          <button className="flex flex-row items-center text-nowrap px-4 py-2 bg-teal-700 rounded-full text-white">
-                            <ArrowDownTrayIcon className="size-6 mx-2" /> Download
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-          )}
 
-          {sectionTracks.length > 0 && (
-            <tr>
-              <td colSpan="2">
-                <table className="w-full mt-2">
-                  <thead >
-                    <tr className="flex flex-row items-center px-4 border-b border-teal-700">
-                      <th className="text-start w-full text-teal-700">{userProfile.voice_section} Tracks</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {sectionTracks.map((track) => (
-                      <tr
-                        key={track.id}
-                        className="flex flex-row items-center py-2 px-4"
-                      >
-                        <td className="text-start w-full">{track.track_name}</td>
-                        <td className="text-end">
-                          <button className="flex flex-row items-center text-nowrap px-4 py-2 bg-teal-700 rounded-full text-white">
-                            <ArrowDownTrayIcon className="size-6 mx-2" /> Download
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-          )}
+              {sectionTracks.length > 0 && (
+                <tr>
+                  <td colSpan="2">
+                    <table className="w-full mt-2">
+                      <thead>
+                        <tr className="flex flex-row items-center px-4 border-b border-teal-700">
+                          <th className="text-start w-full text-teal-700">
+                            {userProfile.voice_section} Tracks
+                          </th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {sectionTracks.map((track) => (
+                          <tr
+                            key={track.id}
+                            className="flex flex-row items-center py-2 px-4"
+                          >
+                            <td className="text-start w-full">
+                              {track.track_name}
+                            </td>
+                            <td className="text-end flex flex-row">
+                              <button className="flex flex-row items-center text-nowrap px-4 py-2 bg-teal-700 rounded-full text-white">
+                                <ArrowDownTrayIcon className="size-4 mr-2" />{" "}
+                                Download
+                              </button>
+                              {user.isAdmin && (
+                                <button
+                                  className="flex flex-row items-center text-nowrap ml-4 px-4 py-2 bg-red-700 rounded-full text-white"
+                                  onClick={() => handleDeleteTrack(track.id)}
+                                >
+                                  <TrashIcon className="size-4 mr-2" />
+                                  Delete
+                                </button>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              )}
 
-          {balancedTracks.length === 0 && sectionTracks.length === 0 && (
-            <tr>
-              <td colSpan="2" className="text-center py-4">
-                No Tracks available
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+              {balancedTracks.length === 0 && sectionTracks.length === 0 && (
+                <tr>
+                  <td colSpan="2" className="text-center py-4">
+                    No Tracks available
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
 
