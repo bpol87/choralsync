@@ -74,7 +74,7 @@ const NavBar = () => {
               {dropdownOpen && (
                 <div
                   ref={dropdownRef}
-                  className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10"
+                  className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10 right-20 mt-52"
                 >
                   <Link
                     to={`/members/${user.id}`}
