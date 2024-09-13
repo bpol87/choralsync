@@ -3,13 +3,11 @@ const profileReducer = (state = {}, action) => {
       case 'SET_USER_PROFILE':
         return action.payload;
       case 'UNSET_USER_PROFILE':
-        return {};
+        return null;
       default:
         return state;
     }
   };
   
-  // user will be on the redux state at:
-  // state.user
   export default profileReducer;
   

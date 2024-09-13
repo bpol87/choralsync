@@ -62,7 +62,6 @@ router.post("/upload-pdf", upload.array("files"), async (req, res) => {
 
 router.delete("/delete-pdf/:id", async (req, res) => {
   const pdfId = req.params.id;
-  console.log('pdfId is:', pdfId);
 
   try {
     const getPdfQuery = `

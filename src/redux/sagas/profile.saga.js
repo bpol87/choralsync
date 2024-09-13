@@ -64,8 +64,11 @@ function* aboutInfo(action) {
 
   function* fetchUserProfile (action) {
     try {
-      const response = yield axios.get("/api/profile/user", action.payload)
-      yield put({type:"SET_USER_PROFILE", payload: response.data[0]})
+      const userId = action.payload;
+      console.log('userId is:', userId)
+      const response = yield axios.get(`/api/profile/user/${userId}`)
+      console.log('here is the action.payload:', response.data)
+      yield put({type:"SET_USER_PROFILE", payload: response.data})
     } catch {
 
     }

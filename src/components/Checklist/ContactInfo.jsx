@@ -19,6 +19,17 @@ function ContactInfo() {
   const [zipCode, setZipCode] = useState(userProfile.zip || "");
   const [hideAddress, setHideAddress] = useState(userProfile.hide_address || false);
 
+const handlePopulateContact = () => {
+  setHideEmail(false)
+  setPhone('6125555555')
+  setHidePhone(false)
+  setAddress_1('4053 S. Main St.')
+  setAddress_2('Suite 421')
+  setCity('Bloomington')
+  setState('MN')
+  setZipCode(55425)
+}
+
   const handleEmailChange = (e) => {
     setHideEmail(e.target.checked);
   };
@@ -51,10 +62,22 @@ function ContactInfo() {
     
   };
 
+  const phoneFormat = (phoneString) => {
+    if (phoneString) {
+      const newPhoneFormat = phoneString.replace(
+        /(\d{3})(\d{3})(\d{4})/,
+        "($1)-$2-$3"
+      );
+      return newPhoneFormat;
+    } else {
+      return "";
+    }
+  };
+
   return (
     <div className="flex flex-col items-center px-4 py-2 text-sm">
       <div className=" flex flex-col items-center border-1 border-slate-600 rounded-lg shadow-md bg-white">
-        <h2 className="text-lg font-bold">Contact Information</h2>
+        <h2 className="text-lg font-bold" onClick={handlePopulateContact}>Contact Information</h2>
         <form>
           <div className="flex flex-col px-4 py-2">
             <label>Email Address:</label>
@@ -80,7 +103,7 @@ function ContactInfo() {
             <input
               className="border rounded-md shadow-sm"
               type="text"
-              value={phone}
+              value={phoneFormat(phone)}
               onChange={(e) => setPhone(e.target.value)}
             />
           </div>

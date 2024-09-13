@@ -42,12 +42,13 @@ function App() {
 
   useEffect(() => {
     dispatch({ type: 'FETCH_USER' });
-    dispatch({ type: 'FETCH_USER_PROFILE'});
+    dispatch({ type: 'FETCH_USER_PROFILE', payload: user.id});
     dispatch({ type: "FETCH_CONCERTS" })
   }, [dispatch]);
 
 useEffect(() => {
-    dispatch({type: 'FETCH_USER_PROFILE'});
+  dispatch({ type: 'FETCH_USER' });
+    dispatch({type: 'FETCH_USER_PROFILE', payload: user.id});
     dispatch({ type: "FETCH_MEMBER_CARDS" });
     dispatch({ type: "FETCH_CONCERTS" });
 }, [])

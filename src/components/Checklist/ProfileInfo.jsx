@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
 
 function ProfileInfo() {
+  let user = useSelector(store => store.user)
   let userProfile = useSelector((store) => store.userProfile);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -26,10 +27,42 @@ function ProfileInfo() {
   const [sheetMusic, setSheetMusic] = useState(userProfile.sheet_music || "");
   const [accessibility, setAccessibility] = useState(userProfile.accessibility || "");
 
-  useEffect(() => {
-    dispatch({ type: "FETCH_USER_PROFILE" });
-  }, [dispatch]);
+const handleProfilePopulate = () => {
+  setFirstName('Erick')
+  setMiddleInitial('R')
+  setHideMiddle(true)
+  setLastName('Smith')
+  setNickname('')
+  setPronouns('He/Him')
+  setHidePronouns(false)
+  setFormalName('Erick R Smith')
+  setShirtSize(6)
+  setHeightFt(5)
+  setHeightIn(11)
+  setSheetMusic('printed')
+  setAccessibility('No accomodations needed')
+}
 
+const handleProfileReset = () => {
+  setFirstName('')
+  setMiddleInitial('')
+  setHideMiddle(false)
+  setLastName('')
+  setNickname('')
+  setPronouns('')
+  setHidePronouns(false)
+  setFormalName('')
+  setShirtSize('')
+  setHeightFt('')
+  setHeightIn('')
+  setSheetMusic('')
+  setAccessibility('')
+}
+
+  useEffect(() => {
+    dispatch({ type: "FETCH_USER_PROFILE", payload: user.id });
+  }, [dispatch]);
+  
   const handleDateChange = (timestamp) => {
     const birthdayFormat = new Intl.DateTimeFormat("en-CA").format(timestamp);
     return birthdayFormat;
@@ -79,7 +112,7 @@ function ProfileInfo() {
   return (
     <div className="flex flex-col items-center px-4 py-2 text-sm">
       <div className="flex flex-col items-center border-1 border-slate-600 rounded-lg shadow-md bg-white">
-        <h2 className="text-lg font-bold">Profile Information</h2>
+        <h2 className="text-lg font-bold" onClick={handleProfilePopulate}>Profile Information</h2>
         <form>
           <div className="flex flex-col px-4 py-2">
             <label>First Name:</label>
@@ -246,7 +279,9 @@ function ProfileInfo() {
             <button
               type="button"
               className="border border-slate-600 rounded-full px-6 m-4 text-xs"
-              onClick={() => history.push("/user")}
+              onClick={() =>
+                {handleProfileReset();
+                history.push("/user")}}
             >
               Cancel
             </button>

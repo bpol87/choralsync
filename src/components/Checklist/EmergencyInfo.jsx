@@ -9,12 +9,19 @@ function EmergencyInfo() {
   const history = useHistory();
 
   useEffect(() => {
-  dispatch({type: "FETCH_USER_PROFILE"})
+  dispatch({type: "FETCH_USER_PROFILE", payload: user.id})
 }, [])
   
   const [emergency_name, setEmergencyName] = useState(userProfile.emergency_name || '');
   const [emergency_relation, setEmergencyRelation] = useState(userProfile.emergency_relation || "");
   const [emergency_phone, setEmergencyPhone] = useState(userProfile.emergency_phone || "");
+
+
+const handleEmergencyPopulate = () => {
+    setEmergencyName('Jane Smith')
+    setEmergencyRelation('Sibling')
+    setEmergencyPhone('6125575557')
+}
 
   const submitEmergency = (button) => {
     let contactToAdd = {
@@ -31,7 +38,7 @@ function EmergencyInfo() {
   return (
     <div className="flex flex-col items-center px-4 py-2 text-sm">
       <div className=" flex flex-col items-center border-1 border-slate-600 rounded-lg shadow-md bg-white">
-        <h2 className="text-lg font-bold">Emergency Contact Information</h2>
+        <h2 className="text-lg font-bold" onClick={handleEmergencyPopulate}>Emergency Contact Information</h2>
         <form>
           <div className="flex flex-col px-4 py-2">
             <label>Emergency Contact Name:</label>
@@ -54,11 +61,11 @@ function EmergencyInfo() {
             >
               <option value={"default"}>Select a Relation:</option>
               <option value={"Mother"}>Mother</option>
-              <option value={"Mother"}>Father</option>
-              <option value={"Mother"}>Sibling</option>
-              <option value={"Mother"}>Friend</option>
-              <option value={"Mother"}>Spouse</option>
-              <option value={"Mother"}>Other</option>
+              <option value={"Father"}>Father</option>
+              <option value={"Sibling"}>Sibling</option>
+              <option value={"Friend"}>Friend</option>
+              <option value={"Spouse"}>Spouse</option>
+              <option value={"Other"}>Other</option>
             </select>
           </div>
           <div className="flex flex-col px-4 py-2">

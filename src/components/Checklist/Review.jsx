@@ -6,11 +6,12 @@ import { UserCircleIcon } from "@heroicons/react/24/outline";
 function ReviewProfile() {
   const history = useHistory();
   const dispatch = useDispatch();
+  const user = useSelector(store => store.user)
   const userProfile = useSelector((store) => store.userProfile);
   console.log(userProfile);
 
   useEffect(() => {
-    dispatch({ type: "FETCH_USER_PROFILE" });
+    dispatch({ type: "FETCH_USER_PROFILE", payload: user.id});
   }, []);
 
   const phoneFormat = (phoneString) => {

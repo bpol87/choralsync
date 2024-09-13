@@ -12,6 +12,14 @@ function AboutInfo() {
   const [employer, setEmployer] = useState("");
   const [occupation, setOccupation] = useState("");
 
+
+  const handlePopulate = () => {
+    setAbout('I have an orange tabby cat at home')
+    setFunFact('Ive traveled to almost all 7 continents')
+    setEmployer('Self Employed')
+    setOccupation('Sofware Developer | UX/UI Designer')
+  }
+
   const submitAbout = (button) => {
     let aboutToAdd = {
       about: about,
