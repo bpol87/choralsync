@@ -6,45 +6,75 @@ import { useHistory } from "react-router-dom";
 
 function Checklist() {
   const dispatch = useDispatch();
-    const history = useHistory();
-    const user = useSelector(store => store.user)
+  const history = useHistory();
+  const user = useSelector((store) => store.user);
 
-    console.log(user)
+  console.log(user);
 
-    const handleClick = (section) => {
-        dispatch({type: "FETCH_USER_PROFILE", payload: user.id})
-        history.push(`/${section}`)
+  const handleClick = (section) => {
+    dispatch({ type: "FETCH_USER_PROFILE", payload: user.id });
+    history.push(`/${section}`);
+  };
+
+  const editButton = (userList, section) => {
+    if (!userList) {
+      return (
+        <button
+          className="border border-slate-600 rounded-full px-6"
+          onClick={() => {
+            handleClick(section);
+          }}
+        >
+          {" "}
+          Start{" "}
+        </button>
+      );
+    } else {
+      return (
+        <button
+          className="border border-slate-600 rounded-full px-6"
+          onClick={() => {
+            handleClick(section);
+          }}
+        >
+          Edit
+        </button>
+      );
     }
+  };
 
-    const editButton = (userList, section) => {
-        if (!userList) {
-            return (<button className="border border-slate-600 rounded-full px-6" onClick={() => {handleClick(section)}}> Start </button>)
-        } else {
-            return (<button className="border border-slate-600 rounded-full px-6" onClick={() => {handleClick(section)}}>Edit</button>)
-        }
+  const iconDisplay = (section) => {
+    if (!section) {
+      return <ExclamationCircleIcon className="size-6 text-yellow-600" />;
+    } else {
+      return <CheckCircleIcon className="size-6 text-green-600" />;
     }
+  };
 
-    const iconDisplay = (section) => {
-        if (!section) {
-            return(<ExclamationCircleIcon className="size-6 text-yellow-600"/>)
-        } else {
-            return(<CheckCircleIcon className="size-6 text-green-600" />)
-        }
+  const statusMessage = (section) => {
+    if (!section) {
+      return <p></p>;
+    } else {
+      return <p className="text-green-600">Completed</p>;
     }
+  };
 
-    const statusMessage = (section) => {
-        if (!section) {
-            return(<p></p>)
-        } else {
-            return(<p className="text-green-600">Completed</p>)
-        }
+  const reviewButton = (user) => {
+    if (
+      user.isProfileComplete &&
+      user.isContactComplete &&
+      user.isEmergencyComplete
+    ) {
+      return (
+        <button
+          className="border border-slate-600 rounded-full px-6"
+          onClick={() => history.push("/review-info")}
+        >
+          Review Profile
+        </button>
+      );
     }
-
-    const reviewButton = (user) => {
-      if (user.isProfileComplete && user.isContactComplete && user.isEmergencyComplete) {
-        return (<button className="border border-slate-600 rounded-full px-6" onClick={()=>history.push('/review-info')}>Review Profile</button>)
-      }
-    }
+  };
 
   return (
     <div className="flex flex-col items-center">
@@ -60,34 +90,54 @@ function Checklist() {
           </thead>
           <tbody>
             <tr className="border-b-2 border-slate-700">
-                <td className="pr-2 py-2">{iconDisplay(user.isProfileComplete)}</td>
-                <td className="py-2">Personal Information</td>
-                <td className="py-2">{statusMessage(user.isProfileComplete)}</td>
-                <td className="flex justify-end m-2 py-2">{editButton(user.isProfileComplete, 'profile-info')}</td>
+              <td className="pr-2 py-2">
+                {iconDisplay(user.isProfileComplete)}
+              </td>
+              <td className="py-2">Personal Information</td>
+              <td className="py-2">{statusMessage(user.isProfileComplete)}</td>
+              <td className="flex justify-end m-2 py-2">
+                {editButton(user.isProfileComplete, "profile-info")}
+              </td>
             </tr>
             <tr className="border-b-2 border-slate-700">
-                <td className="pr-2 py-2">{iconDisplay(user.isContactComplete)}</td>
-                <td className="py-2">Contact Information</td>
-                <td className="py-2">{statusMessage(user.isContactComplete)}</td>
-                <td className="flex justify-end m-2 py-2">{editButton(user.isContactComplete, 'contact-info')}</td>
+              <td className="pr-2 py-2">
+                {iconDisplay(user.isContactComplete)}
+              </td>
+              <td className="py-2">Contact Information</td>
+              <td className="py-2">{statusMessage(user.isContactComplete)}</td>
+              <td className="flex justify-end m-2 py-2">
+                {editButton(user.isContactComplete, "contact-info")}
+              </td>
             </tr>
             <tr className="border-b-2 border-slate-700">
-                <td className="pr-2 py-2">{iconDisplay(user.isEmergencyComplete)}</td>
-                <td className="py-2">Emergency Contact</td>
-                <td className="py-2">{statusMessage(user.isEmergencyComplete)}</td>
-                <td className="flex justify-end m-2 py-2">{editButton(user.isEmergencyComplete, 'emergency-info')}</td>
+              <td className="pr-2 py-2">
+                {iconDisplay(user.isEmergencyComplete)}
+              </td>
+              <td className="py-2">Emergency Contact</td>
+              <td className="py-2">
+                {statusMessage(user.isEmergencyComplete)}
+              </td>
+              <td className="flex justify-end m-2 py-2">
+                {editButton(user.isEmergencyComplete, "emergency-info")}
+              </td>
             </tr>
             <tr className="border-b-2 border-slate-700">
-                <td className="pr-2 py-2">{iconDisplay(user.isAboutComplete)}</td>
-                <td className="py-2">About</td>
-                <td className="py-2">{statusMessage(user.isAboutComplete)}</td>
-                <td className="flex justify-end m-2 py-2">{editButton(user.isAboutComplete, 'about-info')}</td>
+              <td className="pr-2 py-2">{iconDisplay(user.isAboutComplete)}</td>
+              <td className="py-2">About</td>
+              <td className="py-2">{statusMessage(user.isAboutComplete)}</td>
+              <td className="flex justify-end m-2 py-2">
+                {editButton(user.isAboutComplete, "about-info")}
+              </td>
             </tr>
             <tr className="pt-2">
-                <td className="pr-2 pt-2">{iconDisplay(user.isSocialComplete)}</td>
-                <td className="pt-2">Social Media</td>
-                <td className="pt-2">{statusMessage(user.isSocialComplete)}</td>
-                <td className="flex justify-end m-2 pt-2">{editButton(user.isSocialComplete, 'social-info')}</td>
+              <td className="pr-2 pt-2">
+                {iconDisplay(user.isSocialComplete)}
+              </td>
+              <td className="pt-2">Social Media</td>
+              <td className="pt-2">{statusMessage(user.isSocialComplete)}</td>
+              <td className="flex justify-end m-2 pt-2">
+                {editButton(user.isSocialComplete, "social-info")}
+              </td>
             </tr>
           </tbody>
         </table>

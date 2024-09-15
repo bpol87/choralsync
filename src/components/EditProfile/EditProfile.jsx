@@ -19,37 +19,59 @@ function EditProfile() {
   const [lastName, setLastName] = useState(memberToEdit.last_name || "");
   const [nickname, setNickname] = useState(memberToEdit.nickname || "");
   const [pronouns, setPronouns] = useState(memberToEdit.pronouns || "");
-  const [hidePronouns, setHidePronouns] = useState(memberToEdit.hide_pronouns || false);
+  const [hidePronouns, setHidePronouns] = useState(
+    memberToEdit.hide_pronouns || false
+  );
   const [birthday, setBirthday] = useState("");
   const [formalName, setFormalName] = useState(memberToEdit.formal_name || "");
   const [shirtSize, setShirtSize] = useState(memberToEdit.shirt_size_id || "");
   const [heightFt, setHeightFt] = useState(memberToEdit.height_ft || "");
   const [heightIn, setHeightIn] = useState(memberToEdit.height_in || "");
   const [sheetMusic, setSheetMusic] = useState(memberToEdit.sheet_music || "");
-  const [accessibility, setAccessibility] = useState(memberToEdit.accessibility || "");
+  const [accessibility, setAccessibility] = useState(
+    memberToEdit.accessibility || ""
+  );
   const [email, setEmail] = useState(memberToEdit.email || user.username);
   const [hideEmail, setHideEmail] = useState(false);
   const [phone, setPhone] = useState(memberToEdit.phone || "");
   const [hidePhone, setHidePhone] = useState(false);
-  const [address_1, setAddress_1] = useState(memberToEdit.street_address_1 || "");
-  const [address_2, setAddress_2] = useState(memberToEdit.street_address_2 || "");
+  const [address_1, setAddress_1] = useState(
+    memberToEdit.street_address_1 || ""
+  );
+  const [address_2, setAddress_2] = useState(
+    memberToEdit.street_address_2 || ""
+  );
   const [city, setCity] = useState(memberToEdit.city || "");
   const [state, setState] = useState(memberToEdit.state || "MN");
   const [zipCode, setZipCode] = useState(memberToEdit.zip || "");
-  const [hideAddress, setHideAddress] = useState(memberToEdit.hide_address || false);
-  const [emergency_name, setEmergencyName] = useState(memberToEdit.emergency_name || "");
-  const [emergency_relation, setEmergencyRelation] = useState(memberToEdit.emergency_relation || "");
-  const [emergency_phone, setEmergencyPhone] = useState(memberToEdit.emergency_phone || "");
+  const [hideAddress, setHideAddress] = useState(
+    memberToEdit.hide_address || false
+  );
+  const [emergency_name, setEmergencyName] = useState(
+    memberToEdit.emergency_name || ""
+  );
+  const [emergency_relation, setEmergencyRelation] = useState(
+    memberToEdit.emergency_relation || ""
+  );
+  const [emergency_phone, setEmergencyPhone] = useState(
+    memberToEdit.emergency_phone || ""
+  );
   const [about, setAbout] = useState(memberToEdit.about || "");
   const [fun_fact, setFunFact] = useState(memberToEdit.fun_fact || "");
   const [employer, setEmployer] = useState(memberToEdit.employer || "");
   const [occupation, setOccupation] = useState(memberToEdit.occupation || "");
   const [website_url, setWebsiteUrl] = useState(memberToEdit.website_url || "");
   const [x_url, setXUrl] = useState(memberToEdit.x_url || "");
-  const [facebook_url, setFacebookUrl] = useState(memberToEdit.facebook_url || "");
-  const [linkedin_url, setLinkedinUrl] = useState(memberToEdit.linkedin_url || "");
+  const [facebook_url, setFacebookUrl] = useState(
+    memberToEdit.facebook_url || ""
+  );
+  const [linkedin_url, setLinkedinUrl] = useState(
+    memberToEdit.linkedin_url || ""
+  );
   const [tiktok_url, setTiktokUrl] = useState(memberToEdit.tiktok_url || "");
-  const [instagram_url, setInstagramUrl] = useState(memberToEdit.instagram_url || "");
+  const [instagram_url, setInstagramUrl] = useState(
+    memberToEdit.instagram_url || ""
+  );
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [uploadError, setUploadError] = useState(null);
 
@@ -103,7 +125,7 @@ function EditProfile() {
 
   const handleGoBack = () => {
     history.push(`/members/${user.id}`);
-  }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -125,7 +147,7 @@ function EditProfile() {
     formData.append("city", city);
     formData.append("state", state);
     formData.append("zip", zipCode);
-    formData.append('hide_address', hideAddress);
+    formData.append("hide_address", hideAddress);
     formData.append("emergency_name", emergency_name);
     formData.append("emergency_relation", emergency_relation);
     formData.append("emergency_phone", emergency_phone);
@@ -147,7 +169,7 @@ function EditProfile() {
     formData.append("sheetMusic", sheetMusic);
     formData.append("accessibility", accessibility);
     formData.append("shirt_size_id", shirtSize);
-    
+
     // Append the profile photo if one is selected
     if (profilePhoto) {
       formData.append("profilePhoto", profilePhoto);
@@ -163,18 +185,20 @@ function EditProfile() {
     <div className="flex flex-col items-center p-6">
       <div className="bg-white flex flex-col w-fit p-6 rounded-lg shadow-lg">
         <h2 className="text-3xl font-bold">Edit Profile</h2>
-        <div className="flex flex-row py-4 text-xs">
+        <div className="flex flex-row py-4  ">
           <div className="pr-4">
-          <p className="font-bold">Status:</p>
-          <p clas>{memberToEdit.status}</p>
+            <p className="font-bold">Status:</p>
+            <p clas>{memberToEdit.status}</p>
           </div>
           <div>
-          <p className="font-bold">Section:</p>
-          <p>{memberToEdit.voice_section} &#40;{memberToEdit.part}&#41;</p>
-          </div>          
+            <p className="font-bold">Section:</p>
+            <p>
+              {memberToEdit.voice_section} &#40;{memberToEdit.part}&#41;
+            </p>
+          </div>
         </div>
-        <form className="text-xs">
-          <p className="font-bold text-lg pt-2">Personal Information:</p>
+        <form className=" ">
+          <p className="font-bold   pt-2">Personal Information:</p>
           <div className="flex flex-col items-center">
             <div className="flex flex-row w-full py-2">
               <div className=" flex flex-col w-full">
@@ -327,9 +351,7 @@ function EditProfile() {
                 onChange={(e) => setAccessibility(e.target.value)}
               ></textarea>
             </div>
-            <p className="font-bold text-lg pt-2 self-start">
-              Contact Information:
-            </p>
+            <p className="font-bold   pt-2 self-start">Contact Information:</p>
             <div className="flex flex-row w-full py-2">
               <div className="flex flex-col w-full mr-2">
                 <label>Email Address:</label>
@@ -480,7 +502,7 @@ function EditProfile() {
                 </label>
               </div>
             </div>
-            <p className="font-bold text-lg pt-2 self-start">
+            <p className="font-bold   pt-2 self-start">
               Emergency Contact Information:
             </p>
             <div className="flex flex-col w-full">
@@ -520,7 +542,7 @@ function EditProfile() {
                 ></input>
               </div>
             </div>
-            <p className="font-bold text-lg pt-2 self-start">About Me:</p>
+            <p className="font-bold   pt-2 self-start">About Me:</p>
             <div className="flex flex-col py-2 w-full">
               <label>About:</label>
               <textarea
@@ -557,9 +579,7 @@ function EditProfile() {
                 onChange={(e) => setOccupation(e.target.value)}
               ></input>
             </div>
-            <p className="font-bold text-lg pt-2 self-start">
-              Social Media Links:
-            </p>
+            <p className="font-bold   pt-2 self-start">Social Media Links:</p>
             <div className="flex flex-col py-2 w-full">
               <label>Personal Website URL:</label>
               <input
@@ -615,27 +635,36 @@ function EditProfile() {
               ></input>
             </div>
             <div className="flex flex-col py-2 w-full">
-            <label>Update Profile Photo:</label>
-            <div
-              {...getRootProps()}
-              className="border-dashed border-2 border-gray-300 p-4 rounded-md"
-            >
-              <input {...getInputProps()} />
-              {profilePhoto ? (
-                <p className="text-center">File selected: {profilePhoto.name}</p>
-              ) : (
-                <p className="text-center">Drag 'n' drop a file here, or click to select one</p>
-              )}
+              <label>Update Profile Photo:</label>
+              <div
+                {...getRootProps()}
+                className="border-dashed border-2 border-gray-300 p-4 rounded-md"
+              >
+                <input {...getInputProps()} />
+                {profilePhoto ? (
+                  <p className="text-center">
+                    File selected: {profilePhoto.name}
+                  </p>
+                ) : (
+                  <p className="text-center">
+                    Drag 'n' drop a file here, or click to select one
+                  </p>
+                )}
+              </div>
+              {uploadError && <p style={{ color: "red" }}>{uploadError}</p>}
             </div>
-            {uploadError && <p style={{ color: "red" }}>{uploadError}</p>}
-          </div>
             <div className="flex flex-row p-4 w-full justify-end">
-              <button className="mx-2 px-6 py-1 border border-teal-700 text-teal-700 rounded-full"
-             onClick={handleGoBack}>
+              <button
+                className="mx-2 px-6 py-1 border border-teal-700 text-teal-700 rounded-full"
+                onClick={handleGoBack}
+              >
                 Cancel
               </button>
-              <button className="mx-2 px-6 py-1 bg-teal-700 rounded-full text-white"
-                type="button" onClick={()=> submitEditsToMember()}>
+              <button
+                className="mx-2 px-6 py-1 bg-teal-700 rounded-full text-white"
+                type="button"
+                onClick={() => submitEditsToMember()}
+              >
                 Submit Changes
               </button>
             </div>

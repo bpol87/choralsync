@@ -6,9 +6,9 @@ function LogOutButton(props) {
   const history = useHistory();
   const dispatch = useDispatch();
   const logoutClear = () => {
-    history.length = 0
-    dispatch({type: 'LOGOUT'})
-  }
+    history.length = 0;
+    dispatch({ type: "LOGOUT" });
+  };
 
   return (
     <button

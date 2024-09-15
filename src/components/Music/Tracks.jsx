@@ -5,7 +5,7 @@ import {
   XMarkIcon,
   ArrowDownTrayIcon,
   DocumentPlusIcon,
-  TrashIcon
+  TrashIcon,
 } from "@heroicons/react/24/outline";
 
 function ConcertTracks() {
@@ -69,8 +69,8 @@ function ConcertTracks() {
   };
 
   const handleDeletePdf = (pdfId, concertId) => {
-    dispatch({type: 'DELETE_PDF', payload: { pdfId, concertId }})
-  }
+    dispatch({ type: "DELETE_PDF", payload: { pdfId, concertId } });
+  };
 
   // Track handlers
   const handleTrackFileChange = (index, file) => {
@@ -131,18 +131,21 @@ function ConcertTracks() {
       const songId = track.songId ? parseInt(track.songId, 10) : null;
       formData.append("songIds", songId || "");
     });
-    formData.append("userSectionId", sectionId)
+    formData.append("userSectionId", sectionId);
     formData.append("concertId", concertId);
     dispatch({ type: "UPLOAD_TRACKS", payload: formData });
     setShowTrackModal(false);
   };
 
-const handleDeleteTrack = (trackId) => {
-  dispatch({type: 'DELETE_REHEARSAL_TRACK', payload: { concertId, sectionId, trackId }})
-}
+  const handleDeleteTrack = (trackId) => {
+    dispatch({
+      type: "DELETE_REHEARSAL_TRACK",
+      payload: { concertId, sectionId, trackId },
+    });
+  };
 
   return (
-    <div className="flex flex-col w-full items-center text-xs">
+    <div className="flex flex-col w-full items-center  ">
       {/* Concert Information */}
       {activeConcert && (
         <h2 className="py-4 text-3xl font-bold">
@@ -187,8 +190,10 @@ const handleDeleteTrack = (trackId) => {
                         <ArrowDownTrayIcon className="size-4 mr-2" /> Download
                         PDF
                       </button>
-                      <button className="flex flex-row items-center text-nowrap px-4 py-2 ml-4 bg-red-700 rounded-full text-white"
-                      onClick={() => handleDeletePdf(pdf.song_id, concertId)}>
+                      <button
+                        className="flex flex-row items-center text-nowrap px-4 py-2 ml-4 bg-red-700 rounded-full text-white"
+                        onClick={() => handleDeletePdf(pdf.song_id, concertId)}
+                      >
                         <TrashIcon className="size-4 mr-2 " /> Delete
                       </button>
                     </td>

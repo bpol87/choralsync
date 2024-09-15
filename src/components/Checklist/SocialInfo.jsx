@@ -32,7 +32,7 @@ function SocialInfo() {
   return (
     <div className="flex flex-col items-center px-4 py-2 text-sm">
       <div className=" flex flex-col items-center border-1 border-slate-600 rounded-lg shadow-md bg-white">
-        <h2 className="text-lg font-bold">About Me</h2>
+        <h2 className="  font-bold">About Me</h2>
         <form>
           <div className="flex flex-col px-4 py-2">
             <label>Personal Website URL:</label>
@@ -91,13 +91,13 @@ function SocialInfo() {
           <div className="flex flex-row px-4 py-2">
             <button
               type="button"
-              className="border border-slate-600 rounded-full px-6 m-4 text-xs"
+              className="border border-slate-600 rounded-full px-6 m-4  "
               onClick={() => history.push("/user")}
             >
               Cancel
             </button>
             <button
-              className="border border-slate-600 rounded-full px-6 m-4 text-xs"
+              className="border border-slate-600 rounded-full px-6 m-4  "
               onClick={() => submitEmergency("backToChecklist")}
               type="button"
             >

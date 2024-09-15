@@ -1,224 +1,88 @@
 import React, { useEffect } from 'react';
-import {
-  HashRouter as Router,
-  Redirect,
-  Route,
-  Switch,
-} from 'react-router-dom';
-
+import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Nav from '../Nav/Nav';
+import BaseNav from '../Nav/BaseNav';
+import ConditionalNav from '../Nav/ConditionalNav';
+import FullNav from '../Nav/FullNav';
 import Footer from '../Footer/Footer';
-
-import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-
 import AboutPage from '../AboutPage/AboutPage';
-import UserPage from '../UserPage/UserPage';
-import InfoPage from '../InfoPage/InfoPage';
-import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
+import UserPage from '../UserPage/UserPage';
 import Checklist from '../Checklist/Checklist';
 import ProfileInfo from '../Checklist/ProfileInfo';
 import ContactInfo from '../Checklist/ContactInfo';
 import EmergencyInfo from '../Checklist/EmergencyInfo';
-import AboutInfo from '../Checklist/AboutInfo';
 import SocialInfo from '../Checklist/SocialInfo';
 import ReviewProfile from '../Checklist/Review';
-import MemberList from '../Members/MembersList';
+import MemberList from '../Members/MemberList';
 import MemberProfile from '../Members/MemberProfile';
 import EditProfile from '../EditProfile/EditProfile';
 import MusicLibrary from '../Music/MusicLibrary';
 import ConcertTracks from '../Music/Tracks';
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+
 import './App.css';
-
-
 
 function App() {
   const dispatch = useDispatch();
-
   const user = useSelector(store => store.user);
+  const userProfile = useSelector(store => store.userProfile);
 
   useEffect(() => {
     dispatch({ type: 'FETCH_USER' });
-    dispatch({ type: 'FETCH_USER_PROFILE', payload: user.id});
-    dispatch({ type: "FETCH_CONCERTS" })
-  }, [dispatch]);
+    if (user.id) {
+      dispatch({ type: 'FETCH_USER_PROFILE', payload: user.id });
+    }
+    dispatch({ type: 'FETCH_CONCERTS' });
+  }, [dispatch, user.id]);
 
-useEffect(() => {
-  dispatch({ type: 'FETCH_USER' });
-    dispatch({type: 'FETCH_USER_PROFILE', payload: user.id});
-    dispatch({ type: "FETCH_MEMBER_CARDS" });
-    dispatch({ type: "FETCH_CONCERTS" });
-}, [])
+  // Determine which nav to render based on the user profile and user status
+  const renderNav = () => {
+    if (!user.id) {
+      // Show base nav when not logged in
+      return <BaseNav />;
+    }
+
+    if (!userProfile.isChecklistCompleted) {
+      // Show conditional nav if the checklist is not completed
+      return <ConditionalNav />;
+    }
+
+    // Show full nav otherwise
+    return <FullNav />;
+  };
 
   return (
     <Router>
       <div className='bg-gray-300 min-h-screen flex flex-col'>
-        <Nav />
+        {renderNav()}
         <div className='flex flex-col flex-grow'>
-        <Switch>
-          {/* Visiting localhost:5173 will redirect to localhost:5173/home */}
-          <Redirect exact from="/" to="/home" />
-
-          {/* Visiting localhost:5173/about will show the about page. */}
-          <Route
-            // shows AboutPage at all times (logged in or not)
-            exact
-            path="/about"
-          >
-            <AboutPage />
-          </Route>
-
-          {/* For protected routes, the view could show one of several things on the same route.
-            Visiting localhost:5173/user will show the UserPage if the user is logged in.
-            If the user is not logged in, the ProtectedRoute will show the LoginPage (component).
-            Even though it seems like they are different pages, the user is always on localhost:5173/user */}
-          <ProtectedRoute
-            // logged in shows UserPage else shows LoginPage
-            exact
-            path="/user"
-          >
-            {!user.isChecklistCompleted ?
-              <Checklist />
-            :
-            <UserPage />}
-          </ProtectedRoute>
-
-          <ProtectedRoute
-            // logged in shows InfoPage else shows LoginPage
-            exact
-            path="/info"
-          >
-            <InfoPage />
-          </ProtectedRoute>
-
-          <ProtectedRoute
-            // logged in shows InfoPage else shows LoginPage
-            exact
-            path="/profile-info"
-          >
-            <ProfileInfo />
-          </ProtectedRoute>
-          <ProtectedRoute
-            // logged in shows InfoPage else shows LoginPage
-            exact
-            path="/contact-info"
-          >
-            <ContactInfo />
-          </ProtectedRoute>
-          <ProtectedRoute
-            // logged in shows InfoPage else shows LoginPage
-            exact
-            path="/emergency-info"
-          >
-            <EmergencyInfo />
-          </ProtectedRoute>
-          <ProtectedRoute
-            // logged in shows InfoPage else shows LoginPage
-            exact
-            path="/about-info"
-          >
-            <AboutInfo />
-          </ProtectedRoute>
-          <ProtectedRoute
-            // logged in shows InfoPage else shows LoginPage
-            exact
-            path="/social-info"
-          >
-            <SocialInfo />
-          </ProtectedRoute>
-          <ProtectedRoute
-            // logged in shows InfoPage else shows LoginPage
-            exact
-            path="/review-info"
-          >
-            <ReviewProfile />
-          </ProtectedRoute>
-          <ProtectedRoute
-            // logged in shows InfoPage else shows LoginPage
-            exact
-            path="/members"
-          >
-            <MemberList />
-          </ProtectedRoute>
-          <ProtectedRoute
-            // logged in shows InfoPage else shows LoginPage
-            exact
-            path="/members/:id"
-          >
-            <MemberProfile />
-            </ProtectedRoute>
-            <ProtectedRoute
-            // logged in shows InfoPage else shows LoginPage
-            exact
-            path="/edit-profile"
-          >
-            <EditProfile />
-          </ProtectedRoute>
-          <ProtectedRoute
-            // logged in shows InfoPage else shows LoginPage
-            exact
-            path="/music-library"
-          >
-            <MusicLibrary />
-          </ProtectedRoute>
-          <ProtectedRoute
-            // logged in shows InfoPage else shows LoginPage
-            exact
-            path='/music-library/:concertId'
-          >
-            <ConcertTracks />
-          </ProtectedRoute>
-
-          <Route
-            exact
-            path="/login"
-          >
-            {user.id ?
-              // If the user is already logged in, 
-              // redirect to the /user page
-              <Redirect to="/user" />
-              :
-              // Otherwise, show the login page
-              <LoginPage />
-            }
-          </Route>
-
-          <Route
-            exact
-            path="/registration"
-          >
-            {user.id ?
-              // If the user is already logged in, 
-              // redirect them to the /user page
-              <Redirect to="/user" />
-              :
-              // Otherwise, show the registration page
-              <RegisterPage />
-            }
-          </Route>
-
-          <Route
-            exact
-            path="/home"
-          >
-            {user.id ?
-              // If the user is already logged in, 
-              // redirect them to the /user page
-              <Redirect to="/user" />
-              :
-              // Otherwise, show the Landing page
-              <LoginPage />
-            }
-          </Route>
-
-          {/* If none of the other routes matched, we will show a 404. */}
-          <Route>
-            <h1>404</h1>
-          </Route>
-        </Switch>
+          <Switch>
+            <Route exact path="/" render={() => (
+              user.id ? <Redirect to="/user" /> : <Redirect to="/login" />
+            )} />
+            <Route exact path="/about" component={AboutPage} />
+            <ProtectedRoute exact path="/user" component={userProfile.isChecklistCompleted ? UserPage : Checklist} />
+            <ProtectedRoute exact path="/profile-info" component={ProfileInfo} />
+            <ProtectedRoute exact path="/contact-info" component={ContactInfo} />
+            <ProtectedRoute exact path="/emergency-info" component={EmergencyInfo} />
+            <ProtectedRoute exact path="/social-info" component={SocialInfo} />
+            <ProtectedRoute exact path="/review-info" component={ReviewProfile} />
+            <ProtectedRoute exact path="/members" component={MemberList} />
+            <ProtectedRoute exact path="/members/:id" component={MemberProfile} />
+            <ProtectedRoute exact path="/edit-profile" component={EditProfile} />
+            <ProtectedRoute exact path="/music-library" component={MusicLibrary} />
+            <ProtectedRoute exact path="/music-library/:concertId" component={ConcertTracks} />
+            <Route exact path="/login" render={() => (
+              user.id ? <Redirect to="/user" /> : <LoginPage />
+            )} />
+            <Route exact path="/registration" render={() => (
+              user.id ? <Redirect to="/user" /> : <RegisterPage />
+            )} />
+            <Route render={() => <h1>404</h1>} />
+          </Switch>
         </div>
         <Footer />
       </div>
