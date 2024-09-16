@@ -27,7 +27,7 @@ function RegisterForm() {
         className="flex flex-col border border-slate-900 bg-white w-96 items-center rounded-lg shadow-lg p-4 mb-4 "
         onSubmit={registerUser}
       >
-        <h2>Register User</h2>
+        <h2 className="text-2xl text-teal-700 font-bold">Register User</h2>
         {errors.registrationMessage && (
           <h3 className="alert" role="alert">
             {errors.registrationMessage}
@@ -80,7 +80,7 @@ function RegisterForm() {
         </div>
         <div>
           <button
-            className="border border-slate-600 rounded-full px-6 m-4"
+            className="shadow-lg rounded-full w-52 py-2 px-6 m-2   text-white bg-teal-600"
             type="submit"
             name="submit"
           >

@@ -79,6 +79,7 @@ function Checklist() {
   return (
     <div className="flex flex-col items-center">
       <div className="flex flex-col items-center m-4 bg-white p-4">
+        <h2 className="text-3xl font-bold">Create Profile</h2>
         <table>
           <thead>
             <tr>
@@ -93,7 +94,7 @@ function Checklist() {
               <td className="pr-2 py-2">
                 {iconDisplay(user.isProfileComplete)}
               </td>
-              <td className="py-2">Personal Information</td>
+              <td className="py-2">Personal Information <span className="text-red-600 text-xl">*</span></td>
               <td className="py-2">{statusMessage(user.isProfileComplete)}</td>
               <td className="flex justify-end m-2 py-2">
                 {editButton(user.isProfileComplete, "profile-info")}
@@ -103,7 +104,7 @@ function Checklist() {
               <td className="pr-2 py-2">
                 {iconDisplay(user.isContactComplete)}
               </td>
-              <td className="py-2">Contact Information</td>
+              <td className="py-2">Contact Information <span className="text-red-600 text-xl">*</span></td>
               <td className="py-2">{statusMessage(user.isContactComplete)}</td>
               <td className="flex justify-end m-2 py-2">
                 {editButton(user.isContactComplete, "contact-info")}
@@ -113,7 +114,7 @@ function Checklist() {
               <td className="pr-2 py-2">
                 {iconDisplay(user.isEmergencyComplete)}
               </td>
-              <td className="py-2">Emergency Contact</td>
+              <td className="py-2">Emergency Contact <span className="text-red-600 text-xl">*</span></td>
               <td className="py-2">
                 {statusMessage(user.isEmergencyComplete)}
               </td>
@@ -141,6 +142,7 @@ function Checklist() {
             </tr>
           </tbody>
         </table>
+        <p className="text-xs self-start">* Required Fields</p>
         <div>{reviewButton(user)}</div>
       </div>
     </div>

@@ -210,8 +210,8 @@ function EditProfile() {
                   onChange={(e) => setFirstName(e.target.value)}
                 ></input>
               </div>
-              <div className="flex flex-col mx-4 w-20">
-                <label>Middle Initial:</label>
+              <div className="flex flex-col mx-8 w-20">
+                <label className="flex flex-row text-nowrap">Middle Initial:</label>
                 <input
                   className="border border-slate-300 rounded-md py-2 pl-4"
                   placeholder="X"
