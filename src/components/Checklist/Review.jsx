@@ -27,7 +27,8 @@ function ReviewProfile() {
   };
 
   const submitProfile = () => {
-    dispatch({ type: "SUBMIT_FULL_PROFILE", payload: history });
+    let payloadToSend = {history, userProfile}
+    dispatch({ type: "SUBMIT_FULL_PROFILE", payload: payloadToSend });
   };
 
   return (

@@ -78,16 +78,15 @@ function* fetchUserProfile(action) {
 }
 
 function* submitProfile(action) {
-  const history = action.payload;
+  const history = action.payload.history;
+  const userProfile = action.payload.userProfile
   try {
     const response = yield axios.put("/api/profile/user");
-    if (response) {
-      const profileFetched = yield axios.get("/api/profile/user");
-      if (profileFetched) {
+    
         yield history.push("/user");
-      }
+
     }
-  } catch (err) {
+  catch (err) {
     console.log("Error submitting profile", err);
   }
 }

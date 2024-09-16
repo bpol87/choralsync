@@ -120,7 +120,7 @@ function ProfileInfo() {
   return (
     <div className="flex flex-col items-center px-4 py-2 text-sm">
       <div className="flex flex-col items-center border-1 border-slate-600 rounded-lg shadow-md bg-white">
-        <h2 className="  font-bold" onClick={handleProfilePopulate}>
+        <h2 className="  font-bold" onClick={() => handleProfilePopulate()}>
           Profile Information
         </h2>
         <form>

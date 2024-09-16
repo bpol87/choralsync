@@ -14,6 +14,7 @@ import Checklist from '../Checklist/Checklist';
 import ProfileInfo from '../Checklist/ProfileInfo';
 import ContactInfo from '../Checklist/ContactInfo';
 import EmergencyInfo from '../Checklist/EmergencyInfo';
+import AboutInfo from '../Checklist/AboutInfo'
 import SocialInfo from '../Checklist/SocialInfo';
 import ReviewProfile from '../Checklist/Review';
 import MemberList from '../Members/MemberList';
@@ -42,46 +43,170 @@ function App() {
   const renderNav = () => {
     if (!user.id) {
       // Show base nav when not logged in
-      return <BaseNav />;
-    }
-
-    if (!userProfile.isChecklistCompleted) {
+      return (<BaseNav />);
+    } else if (user.isChecklistCompleted) {
+    return (<FullNav />);
+  } else if (!user.isChecklistCompleted) {
       // Show conditional nav if the checklist is not completed
-      return <ConditionalNav />;
-    }
+      return (<ConditionalNav />);
+    } 
+  }
 
-    // Show full nav otherwise
-    return <FullNav />;
-  };
+const renderChecklist = () => {
+  if (!user.id) {
+    return (<Redirect to="/login" />);
+  } else if (user.isChecklistCompleted) {
+    return (<UserPage />)
+  } else if (!user.isChecklistCompleted) {
+    return (<Checklist />)
+  } 
+}
+
+const renderProfileInfo = () => {
+  if (!user.id) {
+    return (<Redirect to="/login" />)
+  } else if (user.id) {
+    return (<ProfileInfo />)
+  }
+}
+
+const renderMemberList = () => {
+  if(!user.id) {
+    return (<Redirect to="/login" />)
+  } else if (user.id) {
+    return (<MemberList />)
+  }
+}
+
+const renderMemberPage = () => {
+  if(!user.id) {
+    return (<Redirect to="/login" />)
+  } else if (user.id) {
+    return (<MemberProfile />)
+  }
+}
+
+const renderEditProfile = () => {
+  if(!user.id) {
+    return (<Redirect to="/login" />)
+  } else if (user.id) {
+    return (<EditProfile />)
+  }
+}
+
+const renderContact = () => {
+  if(!user.id) {
+    return (<Redirect to="/login" />)
+  } else if (user.id) {
+    return (<ContactInfo />)
+  }
+}
+
+const renderEmergency = () => {
+  if(!user.id) {
+    return (<Redirect to="/login" />)
+  } else if (user.id) {
+    return (<EmergencyInfo />)
+  }
+}
+
+const renderAbout = () => {
+  if(!user.id) {
+    return (<Redirect to="/login" />)
+  } else if (user.id) {
+    return (<AboutInfo />)
+  }
+}
+
+const renderSocial = () => {
+  if(!user.id) {
+    return (<Redirect to="/login" />)
+  } else if (user.id) {
+    return (<SocialInfo />)
+  }
+}
+
+const renderReview = () => {
+  if(!user.id) {
+    return (<Redirect to="/login" />)
+  } else if (user.id) {
+    return (<ReviewProfile />)
+  }
+}
+
+const renderConcerts = () => {
+  if(!user.id) {
+    return (<Redirect to="/login" />)
+  } else if (user.id) {
+    return (<MusicLibrary />)
+  }
+}
+
+const renderTracks = () => {
+  if(!user.id) {
+    return (<Redirect to="/login" />)
+  } else if (user.id) {
+    return (<ConcertTracks />)
+  }
+}
 
   return (
     <Router>
-      <div className='bg-gray-300 min-h-screen flex flex-col'>
+      <div className="bg-gray-300 min-h-screen flex flex-col">
         {renderNav()}
-        <div className='flex flex-col flex-grow'>
+        <div className="flex flex-col flex-grow">
           <Switch>
-            <Route exact path="/" render={() => (
-              user.id ? <Redirect to="/user" /> : <Redirect to="/login" />
-            )} />
-            <Route exact path="/about" component={AboutPage} />
-            <ProtectedRoute exact path="/user" component={userProfile.isChecklistCompleted ? UserPage : Checklist} />
-            <ProtectedRoute exact path="/profile-info" component={ProfileInfo} />
-            <ProtectedRoute exact path="/contact-info" component={ContactInfo} />
-            <ProtectedRoute exact path="/emergency-info" component={EmergencyInfo} />
-            <ProtectedRoute exact path="/social-info" component={SocialInfo} />
-            <ProtectedRoute exact path="/review-info" component={ReviewProfile} />
-            <ProtectedRoute exact path="/members" component={MemberList} />
-            <ProtectedRoute exact path="/members/:id" component={MemberProfile} />
-            <ProtectedRoute exact path="/edit-profile" component={EditProfile} />
-            <ProtectedRoute exact path="/music-library" component={MusicLibrary} />
-            <ProtectedRoute exact path="/music-library/:concertId" component={ConcertTracks} />
-            <Route exact path="/login" render={() => (
-              user.id ? <Redirect to="/user" /> : <LoginPage />
-            )} />
-            <Route exact path="/registration" render={() => (
-              user.id ? <Redirect to="/user" /> : <RegisterPage />
-            )} />
-            <Route render={() => <h1>404</h1>} />
+            <Route exact path="/">
+              {user.id ? <Redirect to="/user" /> : <Redirect to="/login" />}
+            </Route>
+            <Route exact path="/about">
+              <AboutPage />
+            </Route>
+            <ProtectedRoute exact path="/user">
+              {renderChecklist()}
+            </ProtectedRoute>
+            <ProtectedRoute exact path="/profile-info">
+              {renderProfileInfo()}
+            </ProtectedRoute>
+            <ProtectedRoute exact path="/contact-info">
+              {renderContact()}
+            </ProtectedRoute>
+            <ProtectedRoute exact path="/emergency-info">
+              {renderEmergency()}
+            </ProtectedRoute>
+            <ProtectedRoute exact path="/social-info">
+              {renderSocial()}
+            </ProtectedRoute>
+            <ProtectedRoute exact path="/about-info">
+              {renderAbout()}
+            </ProtectedRoute>
+            <ProtectedRoute exact path="/review-info">
+              {renderReview()}
+            </ProtectedRoute>
+            <ProtectedRoute exact path="/members">
+              {renderMemberList()}
+            </ProtectedRoute>
+            <ProtectedRoute exact path="/members/:id">
+              {renderMemberPage()}
+            </ProtectedRoute>
+            <ProtectedRoute exact path="/edit-profile">
+              {renderEditProfile()}
+            </ProtectedRoute>
+            <ProtectedRoute exact path="/music-library">
+              {renderConcerts()}
+            </ProtectedRoute>
+            <ProtectedRoute exact path="/music-library/:concertId">
+              {renderTracks()}
+            </ProtectedRoute>
+            <Route exact path="/login">
+              {user.id ? <Redirect to="/user" /> : <LoginPage />}
+            </Route>
+            <Route exact path="/registration">
+              {user.id ? <Redirect to="/user" /> : <RegisterPage />}
+            </Route>
+            <Route>
+              <h1>404</h1>
+            </Route>
           </Switch>
         </div>
         <Footer />
