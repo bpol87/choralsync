@@ -287,7 +287,6 @@ router.put("/social-info", async (req, res) => {
 
 // Get user profile
 router.get("/user/:id", (req, res) => {
-  console.log('reqis:', req.params.id)
   
   const sqlQuery = `
   SELECT *, "shirt_size"."size", "section"."voice_section" AS "choral_section"
@@ -301,7 +300,6 @@ router.get("/user/:id", (req, res) => {
   pool
     .query(sqlQuery, sqlValue)
     .then((response) => {
-      console.log(response.rows)
       res.send(response.rows[0]);
     })
     .catch((err) => {

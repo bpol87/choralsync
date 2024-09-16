@@ -12,7 +12,8 @@ function UserPage() {
     if (user.isAdmin) {
       return (
         <button
-          className="shadow-lg rounded-full w-52 py-2 px-6 m-2   text-white bg-teal-600"
+          className="shadow-lg rounded-full w-52 py-2 px-6 m-2   text-white bg-teal-600 disabled:bg-slate-400 disabled:text-slate-600"
+          disabled
           onClick={() => history.push("/admin")}
         >
           Admin Console
@@ -31,17 +32,19 @@ function UserPage() {
       >
         Music Library
       </button>
-      <button
-        className="shadow-lg rounded-full w-52 py-2 px-6 m-2   text-white bg-teal-600"
-        onClick={() => history.push("/calendar")}
-      >
-        Calendar
-      </button>
+      
       <button
         className="shadow-lg rounded-full w-52 py-2 px-6 m-2   text-white bg-teal-600"
         onClick={() => history.push("/members")}
       >
         Member Directory
+      </button>
+      <button
+        className="shadow-lg rounded-full w-52 py-2 px-6 m-2   text-white bg-teal-600 disabled:bg-slate-400 disabled:text-slate-600"
+        disabled
+        onClick={() => history.push("/calendar")}
+      >
+        Calendar
       </button>
       {handleAdmin()}
       <button

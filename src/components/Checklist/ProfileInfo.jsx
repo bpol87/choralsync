@@ -60,6 +60,7 @@ function ProfileInfo() {
     setNickname("");
     setPronouns("");
     setHidePronouns(false);
+    setBirthday('')
     setFormalName("");
     setShirtSize("");
     setHeightFt("");

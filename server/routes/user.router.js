@@ -27,10 +27,8 @@ router.post("/register", (req, res) => {
     pool
     .query(queryText, [username, password])
     .then((response) => {
-      console.log(response.rows);
       const userId = response.rows[0].id;
       const userEmail = response.rows[0].username;
-      console.log(userId, userEmail);
       const profileQuery = `
       INSERT INTO "profile" ("user_id", "email")
     VALUES ($1, $2)

@@ -25,8 +25,13 @@ function LoginForm() {
   }; // end login
 
   const autoPopulateGen = () => {
-setUsername('erick.smith@example.com')
-setPassword('general')
+    setUsername('erick.smith@example.com')
+    setPassword('general')
+  }
+
+  const autoPopulateAdmin = () => {
+    setUsername('benpollack87@gmail.com')
+    setPassword('admin')
   }
 
   return (
@@ -34,7 +39,7 @@ setPassword('general')
       className="flex flex-col border border-slate-900 bg-white items-center rounded-lg shadow-lg p-4 mb-4"
       onSubmit={login}
     >
-      <h2 className="text-2xl text-teal-700 font-bold">Logi<span onClick={autoPopulateGen}>n</span></h2>
+      <h2 className="text-2xl text-teal-700 font-bold"><span onClick={autoPopulateAdmin}>L</span>ogi<span onClick={autoPopulateGen}>n</span></h2>
       {errors.loginMessage && (
         <h3 className="alert" role="alert">
           {errors.loginMessage}
