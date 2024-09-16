@@ -1,9 +1,6 @@
 -- DATABASE NAME: choralsync_db
 
 -- Database tables with no reference keys:
-DROP TABLE IF EXISTS "users" CASCADE;
-DROP TABLE IF EXISTS "profile" CASCADE;
-
 CREATE TABLE "shirt_size" (
 	"id" SERIAL PRIMARY KEY,
 	"size" VARCHAR(7)
@@ -43,7 +40,7 @@ CREATE TABLE "songs" (
 	"pdf_url" varchar(255)
 );
 
--- Database tables with References:
+--Database tables with reference values:
 CREATE TABLE "tracks" (
 	"id" SERIAL PRIMARY KEY,
 	"track_name" VARCHAR(255),
@@ -130,8 +127,8 @@ CREATE TABLE "profile" (
 	"status_id" INT REFERENCES "status"
 	);
 
--- Database tables with set values:
 
+--Databases with set values:
 INSERT INTO "shirt_size"
 ("size")
 VALUES
@@ -151,6 +148,7 @@ VALUES
 ('Tenor 2'),
 ('Baritone'),
 ('Bass');
+('Balanced Voices')
 
 INSERT INTO "part"
 ("part")
@@ -164,15 +162,3 @@ VALUES
 ('Active'),
 ('Leave of Absence'),
 ('Alumni');
-
-INSERT INTO "shirt_size"
-("")
-VALUES
-('XS'),
-('S'),
-('M'),
-('L'),
-('XL'),
-('XXL'),
-('XXXL'),
-('XXXXL');
