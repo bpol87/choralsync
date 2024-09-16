@@ -24,12 +24,22 @@ function LoginForm() {
     }
   }; // end login
 
+  const autoPopulateGen = () => {
+    setUsername('erick.smith@example.com')
+    setPassword('general')
+  }
+
+  const autoPopulateAdmin = () => {
+    setUsername('benpollack87@gmail.com')
+    setPassword('admin')
+  }
+
   return (
     <form
       className="flex flex-col border border-slate-900 bg-white items-center rounded-lg shadow-lg p-4 mb-4"
       onSubmit={login}
     >
-      <h2 className="text-2xl text-teal-700 font-bold">Login</h2>
+      <h2 className="text-2xl text-teal-700 font-bold"><span onClick={autoPopulateAdmin}>L</span>ogi<span onClick={autoPopulateGen}>n</span></h2>
       {errors.loginMessage && (
         <h3 className="alert" role="alert">
           {errors.loginMessage}
@@ -58,7 +68,7 @@ function LoginForm() {
         />
       </div>
         <button
-          className="border border-slate-600 rounded-full px-6 m-4"
+          className="shadow-lg rounded-full w-52 py-2 px-6 m-2   text-white bg-teal-600"
           type="submit"
           name="submit"
           value="Log In"

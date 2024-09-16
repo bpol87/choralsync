@@ -43,6 +43,7 @@ function ProfileInfo() {
     setNickname("");
     setPronouns("He/Him");
     setHidePronouns(false);
+    setBirthday('1984-05-29')
     setFormalName("Erick R Smith");
     setShirtSize(6);
     setHeightFt(5);
@@ -59,6 +60,7 @@ function ProfileInfo() {
     setNickname("");
     setPronouns("");
     setHidePronouns(false);
+    setBirthday('')
     setFormalName("");
     setShirtSize("");
     setHeightFt("");

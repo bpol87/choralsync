@@ -12,7 +12,7 @@ function LoginPage() {
       <center>
         <button
           type="button"
-          className="border border-slate-600 rounded-full px-6 m-4"
+          className="shadow-lg rounded-full w-52 py-2 px-6 m-2   text-white bg-teal-600"
           onClick={() => {
             history.push("/registration");
           }}

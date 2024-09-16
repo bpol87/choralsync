@@ -1,11 +1,11 @@
 // src/Nav/FullNav.jsx
 
-import React, { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
-import { UserCircleIcon } from '@heroicons/react/24/outline';
-import { useSelector, useDispatch } from 'react-redux';
-import LogOutButton from '../LogOutButton/LogOutButton';
+import React, { useState, useRef } from "react";
+import { Link } from "react-router-dom";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { UserCircleIcon } from "@heroicons/react/24/outline";
+import { useSelector, useDispatch } from "react-redux";
+import LogOutButton from "../LogOutButton/LogOutButton";
 
 const FullNav = () => {
   const user = useSelector((store) => store.user);
@@ -29,17 +29,23 @@ const FullNav = () => {
         />
       );
     } else {
-      return (
-        <UserCircleIcon className="w-10 h-10" />
-      );
+      return <UserCircleIcon className="w-10 h-10" />;
     }
   };
 
   return (
     <div className="flex flex-row p-4 bg-white text-teal-950 shadow-lg items-center w-full">
       <div className="flex flex-row items-center w-full">
-        <img src="/choralsync-logo.png" className="w-8 object-scale-down" alt="Logo" />
-        <img src="/choralsync-title.png" className="h-8 object-scale-down" alt="Title" />
+        <img
+          src="/choralsync-logo.png"
+          className="w-8 object-scale-down"
+          alt="Logo"
+        />
+        <img
+          src="/choralsync-title.png"
+          className="h-8 object-scale-down"
+          alt="Title"
+        />
       </div>
       <div className="flex flex-row justify-end w-full">
         {/* Navigation Links */}
@@ -47,31 +53,46 @@ const FullNav = () => {
           <Link className="hover:bg-teal-800 hover:text-white mr-8" to="/user">
             Home
           </Link>
-          <Link className="hover:bg-teal-800 hover:text-white mr-8" to="/music-library">
+          <Link
+            className="hover:bg-teal-800 hover:text-white mr-8"
+            to="/music-library"
+          >
             Music Library
           </Link>
-          <Link className="hover:bg-teal-800 hover:text-white mr-8" to="/members">
+          <Link
+            className="hover:bg-teal-800 hover:text-white mr-8"
+            to="/members"
+          >
             Member Directory
           </Link>
-          <Link className="hover:bg-teal-800 hover:text-white mr-8" to="/calendar">
+          <Link
+            className="hover:bg-teal-800 hover:text-white mr-8"
+            to="/calendar"
+          >
             Calendar
           </Link>
           {user.isAdmin && (
-            <Link className="hover:bg-teal-800 hover:text-white mr-8" to="/admin">
+            <Link
+              className="hover:bg-teal-800 hover:text-white mr-8"
+              to="/admin"
+            >
               Admin Console
             </Link>
           )}
         </div>
         {/* Profile Circle with Dropdown */}
         <div className="flex flex-row items-center relative">
-          <div className="flex flex-row items-center cursor-pointer" onClick={toggleDropdown}>
+          <div
+            className="flex flex-row items-center cursor-pointer"
+            onClick={toggleDropdown}
+          >
             {handleImage()}
             <ChevronDownIcon className="size-4 ml-2" />
           </div>
           {dropdownOpen && (
             <div
               ref={dropdownRef}
-              className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10"
+              className="absolute right-4 mt-52 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-20"
             >
               <Link
                 to={`/members/${userProfile.user_id}`}
