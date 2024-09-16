@@ -286,8 +286,9 @@ router.put("/social-info", async (req, res) => {
 });
 
 // Get user profile
-router.get("/user", (req, res) => {
-  console.log(req.user)
+router.get("/user/:id", (req, res) => {
+  console.log('reqis:', req.params.id)
+  
   const sqlQuery = `
   SELECT *, "shirt_size"."size", "section"."voice_section" AS "choral_section"
     FROM "profile"
@@ -295,12 +296,13 @@ router.get("/user", (req, res) => {
     JOIN "section" ON profile.section_id = "section".id
     WHERE "user_id" = $1;
   `;
-  const sqlValue = [req.user.id];
+  const sqlValue = [req.params.id];
 
   pool
     .query(sqlQuery, sqlValue)
     .then((response) => {
-      res.send(response.rows);
+      console.log(response.rows)
+      res.send(response.rows[0]);
     })
     .catch((err) => {
       console.log("Error Fetching profile:", err);

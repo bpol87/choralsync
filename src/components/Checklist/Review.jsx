@@ -6,11 +6,12 @@ import { UserCircleIcon } from "@heroicons/react/24/outline";
 function ReviewProfile() {
   const history = useHistory();
   const dispatch = useDispatch();
+  const user = useSelector((store) => store.user);
   const userProfile = useSelector((store) => store.userProfile);
   console.log(userProfile);
 
   useEffect(() => {
-    dispatch({ type: "FETCH_USER_PROFILE" });
+    dispatch({ type: "FETCH_USER_PROFILE", payload: user.id });
   }, []);
 
   const phoneFormat = (phoneString) => {
@@ -26,14 +27,15 @@ function ReviewProfile() {
   };
 
   const submitProfile = () => {
-    dispatch({ type: "SUBMIT_FULL_PROFILE", payload: history });
+    let payloadToSend = {history, userProfile}
+    dispatch({ type: "SUBMIT_FULL_PROFILE", payload: payloadToSend });
   };
 
   return (
     <div>
       <div className="flex flex-col items-center px-4 py-2 text-sm">
         <div className=" flex flex-col items-center border-1 border-slate-600 rounded-lg shadow-md bg-white p-4">
-          <h2 className="text-lg font-bold">Review Profile</h2>
+          <h2 className="  font-bold">Review Profile</h2>
           <div className="flex flex-row">
             <div id="left-side" className="mr-4">
               <div className=" w-96 mb-4 p-4 shadow-md border border-teal-700 rounded-lg">
@@ -117,9 +119,9 @@ function ReviewProfile() {
                 </div>
                 <div className="py-2">
                   <p className="font-bold">Email:</p>
-                    {userProfile.hide_email && (
-                      <p className="text-slate-500">(hidden from directory)</p>
-                    )}
+                  {userProfile.hide_email && (
+                    <p className="text-slate-500">(hidden from directory)</p>
+                  )}
                   <p>{userProfile.email}</p>
                 </div>
                 <div className="py-2">
@@ -221,6 +223,5 @@ function ReviewProfile() {
     </div>
   );
 }
-
 
 export default ReviewProfile;

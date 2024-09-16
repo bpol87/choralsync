@@ -12,24 +12,30 @@ function AboutInfo() {
   const [employer, setEmployer] = useState("");
   const [occupation, setOccupation] = useState("");
 
+  const handlePopulate = () => {
+    setAbout("I have an orange tabby cat at home");
+    setFunFact("Ive traveled to almost all 7 continents");
+    setEmployer("Self Employed");
+    setOccupation("Sofware Developer | UX/UI Designer");
+  };
+
   const submitAbout = (button) => {
     let aboutToAdd = {
       about: about,
       fun_fact: fun_fact,
       employer: employer,
-      occupation: occupation
+      occupation: occupation,
     };
 
     dispatch({ type: "SUBMIT_ABOUT", payload: aboutToAdd });
 
-      history.push("/user");
-   
+    history.push("/user");
   };
 
   return (
     <div className="flex flex-col items-center px-4 py-2 text-sm">
       <div className=" flex flex-col items-center border-1 border-slate-600 rounded-lg shadow-md bg-white">
-        <h2 className="text-lg font-bold">About Me</h2>
+        <h2 className="  font-bold">About Me</h2>
         <form>
           <div className="flex flex-col px-4 py-2">
             <label>About:</label>
@@ -70,15 +76,15 @@ function AboutInfo() {
           </div>
           <div className="flex flex-row px-4 py-2">
             <button
-            type="button"
-              className="border border-slate-600 rounded-full px-6 m-4 text-xs"
+              type="button"
+              className="border border-slate-600 rounded-full px-6 m-4  "
               onClick={() => history.push("/user")}
             >
               Cancel
             </button>
             <button
-            type="button"
-              className="border border-slate-600 rounded-full px-6 m-4 text-xs"
+              type="button"
+              className="border border-slate-600 rounded-full px-6 m-4  "
               onClick={() => submitAbout("backToChecklist")}
             >
               Save and Back To Checklist
@@ -91,4 +97,3 @@ function AboutInfo() {
 }
 
 export default AboutInfo;
-

@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import {
-  PlusCircleIcon,
-  XCircleIcon,
-} from "@heroicons/react/24/outline";
+import { PlusCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 function MusicLibrary() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,7 +19,7 @@ function MusicLibrary() {
   }, [dispatch]);
 
   const concerts = useSelector((store) => store.concerts.concertList) || [];
-  console.log(concerts)
+  console.log(concerts);
   const user = useSelector((store) => store.user);
 
   const handleClick = (concertId) => {
@@ -63,10 +60,7 @@ function MusicLibrary() {
         <ul>
           {concerts.length > 0 ? (
             concerts.map((concert) => (
-              <li
-                key={concert.id}
-                className="flex flex-row py-2"
-              >
+              <li key={concert.id} className="flex flex-row py-2">
                 <div
                   className="underline underline-offset-1 text-teal-700"
                   onClick={() => handleClick(concert.id)}

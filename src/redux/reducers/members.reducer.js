@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 
-const membersCards = (state = {}, action) => {
+const membersCards = (state = [], action) => {
   switch (action.type) {
     case "SET_MEMBER_CARDS":
       return action.payload;

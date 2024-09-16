@@ -13,7 +13,6 @@ function LandingPage() {
 
   return (
     <div className="w-full">
-
       <div className="flex flex-col items-center">
         <RegisterForm />
         <h4>Already a Member?</h4>
